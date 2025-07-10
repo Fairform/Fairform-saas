@@ -4,6 +4,12 @@ declare module '@/components/footer' {
   export default Footer;
 }
 
+declare module '@/components/navbar' {
+  import { FC } from 'react';
+  const Navbar: FC;
+  export default Navbar;
+}
+
 declare module '@/components/gradient-orb' {
   import { FC } from 'react';
   interface GradientOrbProps {
