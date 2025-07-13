@@ -143,15 +143,7 @@ Visit `http://localhost:3000` to see the application.
 ## 📁 Project Structure
 
 ```
-fairform-saas/
-├── app/                    # Next.js App Router
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Homepage
-│   ├── products/          # Products pages
-│   ├── pricing/           # Pricing page
-│   ├── login/             # Authentication
-│   ├── dashboard/         # User dashboard
+ User dashboard
 │   ├── document-engine/   # Document generator
 │   └── api/               # API routes
 │       ├── generate/      # Document generation
@@ -251,7 +243,15 @@ npm run test:generate
 - `POST /api/webhooks/stripe` - Handle Stripe webhooks
 
 ### Authentication
-- `POST /api/auth/login` - User login
+- `POST /api/auth/login` - Userfairform-saas/
+├── app/                    # Next.js App Router
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Homepage
+│   ├── products/          # Products pages
+│   ├── pricing/           # Pricing page
+│   ├── login/             # Authentication
+│   ├── dashboard/         # login
 - `POST /api/auth/signup` - User registration
 - `POST /api/auth/logout` - User logout
 
