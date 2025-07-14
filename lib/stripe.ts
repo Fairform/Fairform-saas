@@ -1,86 +1,62 @@
+// lib/stripe.ts
 import Stripe from 'stripe'
-import { loadStripe } from '@stripe/stripe-js'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!) // ✅ removed apiVersion
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // @ts-ignore - Using compatible API version
+  apiVersion: '2023-10-16',
+})
 
-export const getStripe = () => {
-  return loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+export const verifyStripeSession = async (sessionId: string) => {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId)
+    
+    if (session.payment_status !== 'paid') {
+      throw new Error('Payment not completed')
+    }
+
+    return {
+      id: session.id,
+      amount: session.amount_total,
+      currency: session.currency,
+      customerEmail: session.customer_details?.email,
+      metadata: session.metadata
+    }
+  } catch (error) {
+    console.error('Error verifying Stripe session:', error)
+    throw error
+  }
 }
 
-export const PRICING_PLANS = {
-  starter: {
-    id: 'starter',
-    name: 'Starter Pack',
-    price: 199,
-    description: 'Essential compliance documents for getting started',
-    features: [
-      '10 Industry-specific policies',
-      'Professional document formatting',
-      'Logo and branding integration',
-      'DOCX and PDF downloads',
-      'Email support'
-    ],
-    stripePriceId: 'price_starter_pack'
-  },
-  pro: {
-    id: 'pro',
-    name: 'Pro Plan',
-    price: 119,
-    interval: 'month' as const,
-    description: 'Complete compliance solution for growing businesses',
-    features: [
-      'Unlimited document generation',
-      'All industry templates',
-      'Priority AI processing',
-      'Custom branding',
-      'Document version control',
-      'Priority support',
-      'Compliance updates'
-    ],
-    popular: true,
-    stripePriceId: 'price_pro_monthly'
-  },
-  enterprise: {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 149,
-    interval: 'month' as const,
-    description: 'Advanced features for large organizations',
-    features: [
-      'Everything in Pro',
-      'Multi-location support',
-      'Advanced customization',
-      'API access',
-      'Dedicated account manager',
-      'Custom integrations',
-      'SLA guarantee'
-    ],
-    stripePriceId: 'price_enterprise_monthly'
-  }
-} as const
-
-export async function createCheckoutSession(
+export const createCheckoutSession = async (
   priceId: string,
   userId: string,
   successUrl: string,
-  cancelUrl: string
-) {
-  const session = await stripe.checkout.sessions.create({
-    customer_email: undefined,
-    metadata: {
-      userId,
-    },
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
+  cancelUrl: string,
+  metadata: Record<string, string> = {}
+) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        userId,
+        ...metadata
       },
-    ],
-    mode: priceId.includes('monthly') ? 'subscription' : 'payment',
-    success_url: successUrl,
-    cancel_url: cancelUrl,
-  })
+    })
 
-  return session
+    return session
+  } catch (error) {
+    console.error('Error creating checkout session:', error)
+    throw error
+  }
 }
 
+export { stripe }

@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Check, ArrowRight } from 'lucide-react'
+import { Eye, EyeOff, Check, ArrowRight, AlertCircle } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 // Ultra-minimal orb - barely visible
 const SubtleOrb = ({ className = '' }) => {
@@ -23,10 +25,13 @@ const SubtleOrb = ({ className = '' }) => {
 }
 
 export default function LoginPage() {
+  const router = useRouter()
   const [isSignUp, setIsSignUp] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -35,26 +40,142 @@ export default function LoginPage() {
     industry: ''
   })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
-      if (isSignUp) {
-        alert('Account created successfully! Check your email to verify.')
-      } else {
-        window.location.href = '/dashboard'
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        router.push('/dashboard')
       }
-    }, 1500)
+    }
+    checkUser()
+  }, [router])
+
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      setError('Email and password are required')
+      return false
+    }
+
+    if (isSignUp) {
+      if (!formData.company || !formData.industry) {
+        setError('Company name and industry are required')
+        return false
+      }
+      
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match')
+        return false
+      }
+      
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters')
+        return false
+      }
+    }
+
+    return true
   }
 
-  const handleInputChange = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    setSuccess('')
+
+    if (!validateForm()) {
+      setLoading(false)
+      return
+    }
+    
+    try {
+      if (isSignUp) {
+        // Sign up new user
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              company: formData.company,
+              industry: formData.industry,
+              full_name: formData.company, // Use company as display name
+            }
+          }
+        })
+
+        if (signUpError) {
+          throw signUpError
+        }
+
+        if (data.user && !data.session) {
+          setSuccess('Account created! Please check your email to verify your account before signing in.')
+        } else if (data.session) {
+          // User was automatically signed in
+          setSuccess('Account created successfully!')
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 1500)
+        }
+      } else {
+        // Sign in existing user
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (signInError) {
+          throw signInError
+        }
+
+        setSuccess('Signed in successfully!')
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 1000)
+      }
+    } catch (error: any) {
+      console.error('Auth error:', error)
+      
+      // Handle specific Supabase error messages
+      let errorMessage = 'An error occurred. Please try again.'
+      
+      if (error.message.includes('Email not confirmed')) {
+        errorMessage = 'Please check your email and click the confirmation link before signing in.'
+      } else if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Invalid email or password. Please try again.'
+      } else if (error.message.includes('User already registered')) {
+        errorMessage = 'An account with this email already exists. Try signing in instead.'
+      } else if (error.message.includes('Password should be at least 6 characters')) {
+        errorMessage = 'Password must be at least 6 characters long.'
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+      
+      setError(errorMessage)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }))
+    // Clear errors when user starts typing
+    if (error) setError('')
+  }
+
+  const handleModeSwitch = () => {
+    setIsSignUp(!isSignUp)
+    setError('')
+    setSuccess('')
+    setFormData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      company: '',
+      industry: ''
+    })
   }
 
   const industries = [
@@ -91,9 +212,12 @@ export default function LoginPage() {
             <a href="/login" className="text-sm text-gray-900 font-medium">
               {isSignUp ? 'Sign up' : 'Log in'}
             </a>
-            <a href="/signup" className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+            <button
+              onClick={handleModeSwitch}
+              className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+            >
               {isSignUp ? 'Log in' : 'Sign up'}
-            </a>
+            </button>
           </div>
         </div>
       </header>
@@ -118,6 +242,29 @@ export default function LoginPage() {
               </p>
             </div>
 
+            {/* Error/Success Messages */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3"
+              >
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{error}</p>
+              </motion.div>
+            )}
+
+            {success && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3"
+              >
+                <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-green-700">{success}</p>
+              </motion.div>
+            )}
+
             {/* Form */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -125,7 +272,7 @@ export default function LoginPage() {
               transition={{ duration: 0.6 }}
               className="bg-white border border-gray-200 rounded-2xl p-8"
             >
-              <div onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {isSignUp && (
                   <>
                     <div>
@@ -136,7 +283,7 @@ export default function LoginPage() {
                         id="company"
                         name="company"
                         type="text"
-                        required
+                        required={isSignUp}
                         value={formData.company}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
@@ -151,7 +298,7 @@ export default function LoginPage() {
                       <select
                         id="industry"
                         name="industry"
-                        required
+                        required={isSignUp}
                         value={formData.industry}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
@@ -222,7 +369,7 @@ export default function LoginPage() {
                         id="confirmPassword"
                         name="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
-                        required
+                        required={isSignUp}
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors pr-12"
@@ -263,8 +410,7 @@ export default function LoginPage() {
                 )}
 
                 <button
-                  type="button"
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={loading}
                   className="w-full bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -289,14 +435,14 @@ export default function LoginPage() {
                     <a href="/privacy" className="text-gray-900 hover:underline">Privacy Policy</a>
                   </p>
                 )}
-              </div>
+              </form>
 
               {/* Toggle */}
               <div className="mt-6 text-center">
                 <p className="text-gray-600">
                   {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
                   <button
-                    onClick={() => setIsSignUp(!isSignUp)}
+                    onClick={handleModeSwitch}
                     className="text-gray-900 hover:underline font-medium"
                   >
                     {isSignUp ? 'Sign in' : 'Sign up'}
