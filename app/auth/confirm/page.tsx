@@ -1,12 +1,12 @@
 // app/auth/confirm/page.tsx
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Check, AlertCircle, Loader } from 'lucide-react'
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -113,5 +113,27 @@ export default function ConfirmEmailPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white border border-gray-200 rounded-2xl p-8">
+            <Loader className="w-12 h-12 text-gray-400 mx-auto mb-4 animate-spin" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Loading...
+            </h1>
+            <p className="text-gray-600">
+              Please wait while we load the page.
+            </p>
+          </div>
+        </div>
+      </div>
+    }>
+      <ConfirmEmailContent />
+    </Suspense>
   )
 }

@@ -42,6 +42,57 @@ export const verifyUserToken = async (token: string) => {
 // Export for backward compatibility
 export const verifyUser = verifyUserToken
 
+export const getUserDetails = async (userId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching user details:', error)
+      return null
+    }
+    
+    return data
+  } catch (error) {
+    console.error('Error in getUserDetails:', error)
+    return null
+  }
+}
+
+export const getUser = async () => {
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser()
+    if (error) {
+      console.error('Error getting user:', error)
+      return null
+    }
+    return user
+  } catch (error) {
+    console.error('Error in getUser:', error)
+    return null
+  }
+}
+
+// Export service role client for server-side operations
+export const getServiceRoleClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase service role configuration')
+  }
+  
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  })
+}
+
 // Test connection on module load (development only)
 if (process.env.NODE_ENV === 'development') {
   supabase.auth.getSession().then(({ error }) => {

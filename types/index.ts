@@ -167,3 +167,58 @@ export interface UserProfile {
   created_at: string;
   updated_at: string;
 }
+
+export type Industry = 
+  | 'technology' | 'Technology'
+  | 'healthcare' | 'Healthcare'
+  | 'finance' | 'Finance'
+  | 'retail' | 'Retail'
+  | 'manufacturing' | 'Manufacturing'
+  | 'construction' | 'Construction'
+  | 'education' | 'Education'
+  | 'hospitality' | 'Hospitality'
+  | 'ndis' | 'NDIS'
+  | 'general' | 'General'
+  | 'Disability Services'
+  | 'Aged Care'
+  | 'Childcare'
+  | 'Professional Services';
+
+export type PolicyType = 
+  | 'privacy_policy' | 'Privacy Policy'
+  | 'terms_conditions'
+  | 'employment_agreement'
+  | 'service_agreement'
+  | 'safety_policy'
+  | 'compliance_policy'
+  | 'risk_management' | 'Risk Management'
+  | 'incident_management'
+  | 'Workplace Health and Safety'
+  | 'Code of Conduct'
+  | 'Anti-Discrimination'
+  | 'Incident Response'
+  | 'Data Protection'
+  | 'Quality Assurance'
+  | 'NDIS Practice Standards'
+  | 'Child Safety';
+
+export type Region = 
+  | 'australia'
+  | 'new_south_wales' | 'NSW'
+  | 'victoria' | 'VIC'
+  | 'queensland' | 'QLD'
+  | 'western_australia' | 'WA'
+  | 'south_australia' | 'SA'
+  | 'tasmania' | 'TAS'
+  | 'northern_territory' | 'NT'
+  | 'act' | 'ACT';
+
+export interface AgentResponse {
+  success: boolean;
+  message: string;
+  response: string;
+  agentId: string;
+  logId: string;
+  data?: any;
+  error?: string;
+}

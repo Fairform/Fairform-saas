@@ -21,7 +21,7 @@ const POLICY_TYPES: PolicyType[] = [
 const REGIONS: Region[] = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'ACT', 'NT']
 
 export default function Generate() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     industry: '' as Industry,
@@ -68,12 +68,11 @@ export default function Generate() {
 
     try {
       // Create Stripe checkout session
-      const session = await createCheckoutSession(
-        'price_1234567890', // Replace with your actual price ID
-        `${window.location.origin}/generate/success`,
-        `${window.location.origin}/generate`,
-        user.id,
-        {
+      const session = await createCheckoutSession({
+        priceId: 'price_1234567890', // Replace with your actual price ID
+        userId: user.id,
+        customerEmail: user.email,
+        metadata: {
           industry: formData.industry,
           policyType: formData.policyType,
           businessName: formData.businessName,
@@ -81,7 +80,7 @@ export default function Generate() {
           region: formData.region,
           format: formData.format
         }
-      )
+      })
 
       // Redirect to Stripe Checkout
       window.location.href = session.url

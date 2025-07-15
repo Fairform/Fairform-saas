@@ -46,6 +46,7 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
+      message: 'Method not allowed',
       response: '',
       agentId: '',
       logId: '',
@@ -62,6 +63,7 @@ export default async function handler(
     if (!agent) {
       return res.status(400).json({
         success: false,
+        message: 'Invalid agent ID',
         response: '',
         agentId: validatedData.agentId,
         logId: '',
@@ -107,6 +109,7 @@ Focus on Australian regulations and business practices.
 
     res.status(200).json({
       success: true,
+      message: 'Response generated successfully',
       response: llmResponse.text,
       agentId: validatedData.agentId,
       logId: logEntry?.id || ''
@@ -118,6 +121,7 @@ Focus on Australian regulations and business practices.
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         success: false,
+        message: 'Invalid request data',
         response: '',
         agentId: '',
         logId: '',
@@ -127,6 +131,7 @@ Focus on Australian regulations and business practices.
 
     res.status(500).json({
       success: false,
+      message: 'Internal server error',
       response: '',
       agentId: '',
       logId: '',
