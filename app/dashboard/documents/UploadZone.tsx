@@ -246,7 +246,7 @@ export default function UploadZone({ onUploadComplete, onUploadStart }: UploadZo
                       </button>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-[10px] text-gray-500">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </div>
                   {file.status === 'uploading' && (
