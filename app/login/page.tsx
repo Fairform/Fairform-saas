@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Check, ArrowRight, AlertCircle, Shield } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
+import Logo from '@/components/Logo'
 
 // Navigation helper component (matching pricing page)
 const NavigationLink = ({ href, children, className, onClick }: { 
@@ -64,6 +66,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const { signIn, signUp, user } = useAuth()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -71,6 +74,19 @@ export default function LoginPage() {
     company: '',
     industry: ''
   })
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('mode') === 'signup') {
+      setIsSignUp(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = '/dashboard'
+    }
+  }, [user])
 
   // Mock authentication functions (replace with your actual auth logic)
   const validateForm = () => {
@@ -110,20 +126,27 @@ export default function LoginPage() {
     }
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
       if (isSignUp) {
+        const { user, error } = await signUp(formData.email, formData.password, {
+          company: formData.company,
+          industry: formData.industry
+        })
+        
+        if (error) throw error
+        
         setSuccess('Account created! Please check your email to verify your account before signing in.')
       } else {
+        const { user, error } = await signIn(formData.email, formData.password)
+        
+        if (error) throw error
+        
         setSuccess('Signed in successfully!')
         setTimeout(() => {
-          // Navigate to dashboard
           window.location.href = '/dashboard'
         }, 1000)
       }
     } catch (error: any) {
-      setError('An error occurred. Please try again.')
+      setError(error.message || 'An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -170,8 +193,7 @@ export default function LoginPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">FairForm</span>
+              <Logo width={24} height={24} />
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">

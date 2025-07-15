@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
+import Logo from '@/components/Logo'
 
 export default function DashboardPage() {
   const { user, session, loading, signOut } = useAuth()
@@ -82,10 +83,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-black rounded-md"></div>
-                <span className="text-lg font-medium text-gray-900">FairForm</span>
-              </div>
+              <Logo width={24} height={24} />
               
               <nav className="hidden md:flex items-center space-x-6">
                 <button className="text-sm text-gray-900 font-medium">Dashboard</button>
