@@ -64,6 +64,55 @@ create table subscriptions (
   trial_end timestamp with time zone
 );
 
+-- CREATE MISSING TABLES FOR WEBHOOK INTEGRATION
+
+-- Stripe checkout sessions tracking (for webhook)
+create table stripe_sessions (
+  id uuid default uuid_generate_v4() primary key,
+  session_id varchar(255) unique not null,
+  user_id uuid references auth.users(id) on delete cascade,
+  amount integer,
+  currency varchar(3),
+  status varchar(50) default 'pending',
+  product_type varchar(255),
+  metadata jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- User subscriptions table (for webhook)
+create table user_subscriptions (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  stripe_subscription_id varchar(255) unique not null,
+  stripe_customer_id varchar(255),
+  status varchar(50),
+  current_period_start timestamp with time zone,
+  current_period_end timestamp with time zone,
+  cancel_at_period_end boolean default false,
+  canceled_at timestamp with time zone,
+  product_name varchar(255),
+  price_id varchar(255),
+  metadata jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- User access control table (for webhook)
+create table user_access (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  product_name varchar(255),
+  access_type varchar(50) check (access_type in ('one_time', 'subscription')),
+  is_active boolean default true,
+  granted_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  expires_at timestamp with time zone,
+  revoked_at timestamp with time zone,
+  metadata jsonb,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(user_id, product_name, access_type)
+);
+
 -- Create usage table for tracking user activity
 create table usage (
   id uuid default uuid_generate_v4() primary key,
@@ -81,6 +130,9 @@ create table generated_documents (
   content text,
   document_type text,
   industry text,
+  format text check (format in ('docx', 'pdf')),
+  file_url text,
+  business_info jsonb,
   metadata jsonb,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -90,6 +142,9 @@ create table generated_documents (
 alter table profiles enable row level security;
 alter table customers enable row level security;
 alter table subscriptions enable row level security;
+alter table stripe_sessions enable row level security;
+alter table user_subscriptions enable row level security;
+alter table user_access enable row level security;
 alter table usage enable row level security;
 alter table generated_documents enable row level security;
 
@@ -100,6 +155,12 @@ create policy "Users can update own profile." on profiles for update using (auth
 create policy "Users can view own customer data." on customers for select using (auth.uid() = id);
 
 create policy "Users can view own subscriptions." on subscriptions for select using (auth.uid() = user_id);
+
+create policy "Users can view own stripe sessions." on stripe_sessions for select using (auth.uid() = user_id);
+
+create policy "Users can view own user subscriptions." on user_subscriptions for select using (auth.uid() = user_id);
+
+create policy "Users can view own access." on user_access for select using (auth.uid() = user_id);
 
 create policy "Users can view own usage." on usage for select using (auth.uid() = user_id);
 create policy "Users can insert own usage." on usage for insert with check (auth.uid() = user_id);
@@ -141,6 +202,15 @@ $$ language plpgsql;
 create trigger handle_updated_at before update on profiles
   for each row execute procedure handle_updated_at();
 
+create trigger handle_updated_at before update on stripe_sessions
+  for each row execute procedure handle_updated_at();
+
+create trigger handle_updated_at before update on user_subscriptions
+  for each row execute procedure handle_updated_at();
+
+create trigger handle_updated_at before update on user_access
+  for each row execute procedure handle_updated_at();
+
 create trigger handle_updated_at before update on generated_documents
   for each row execute procedure handle_updated_at();
 
@@ -148,7 +218,17 @@ create trigger handle_updated_at before update on generated_documents
 create index profiles_email_idx on profiles(email);
 create index subscriptions_user_id_idx on subscriptions(user_id);
 create index subscriptions_status_idx on subscriptions(status);
+create index stripe_sessions_user_id_idx on stripe_sessions(user_id);
+create index stripe_sessions_session_id_idx on stripe_sessions(session_id);
+create index stripe_sessions_status_idx on stripe_sessions(status);
+create index user_subscriptions_user_id_idx on user_subscriptions(user_id);
+create index user_subscriptions_stripe_subscription_id_idx on user_subscriptions(stripe_subscription_id);
+create index user_subscriptions_status_idx on user_subscriptions(status);
+create index user_access_user_id_idx on user_access(user_id);
+create index user_access_product_name_idx on user_access(product_name);
+create index user_access_is_active_idx on user_access(is_active);
 create index usage_user_id_idx on usage(user_id);
 create index usage_created_at_idx on usage(created_at);
 create index generated_documents_user_id_idx on generated_documents(user_id);
 create index generated_documents_created_at_idx on generated_documents(created_at);
+create index generated_documents_document_type_idx on generated_documents(document_type);

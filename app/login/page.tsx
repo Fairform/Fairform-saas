@@ -2,9 +2,42 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Check, ArrowRight, AlertCircle } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { Eye, EyeOff, Check, ArrowRight, AlertCircle, Shield } from 'lucide-react'
+
+// Navigation helper component (matching pricing page)
+const NavigationLink = ({ href, children, className, onClick }: { 
+  href: string
+  children: React.ReactNode
+  className?: string
+  onClick?: () => void
+}) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    
+    if (onClick) {
+      onClick()
+    } else {
+      // For demonstration purposes, we'll use window.location.href
+      // In a real app, you'd replace this with your routing solution:
+      // - Next.js: Use next/link or router.push()
+      // - React Router: Use Link component or navigate()
+      // - Other: Your preferred routing method
+      
+      console.log(`Navigating to: ${href}`)
+      window.location.href = href
+    }
+  }
+
+  return (
+    <a 
+      href={href} 
+      className={className}
+      onClick={handleClick}
+    >
+      {children}
+    </a>
+  )
+}
 
 // Ultra-minimal orb - barely visible
 const SubtleOrb = ({ className = '' }) => {
@@ -25,7 +58,6 @@ const SubtleOrb = ({ className = '' }) => {
 }
 
 export default function LoginPage() {
-  const router = useRouter()
   const [isSignUp, setIsSignUp] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -40,17 +72,7 @@ export default function LoginPage() {
     industry: ''
   })
 
-  // Check if user is already logged in
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        router.push('/dashboard')
-      }
-    }
-    checkUser()
-  }, [router])
-
+  // Mock authentication functions (replace with your actual auth logic)
   const validateForm = () => {
     if (!formData.email || !formData.password) {
       setError('Email and password are required')
@@ -77,8 +99,7 @@ export default function LoginPage() {
     return true
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     setLoading(true)
     setError('')
     setSuccess('')
@@ -89,68 +110,20 @@ export default function LoginPage() {
     }
     
     try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
       if (isSignUp) {
-        // Sign up new user
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            data: {
-              company: formData.company,
-              industry: formData.industry,
-              full_name: formData.company, // Use company as display name
-            }
-          }
-        })
-
-        if (signUpError) {
-          throw signUpError
-        }
-
-        if (data.user && !data.session) {
-          setSuccess('Account created! Please check your email to verify your account before signing in.')
-        } else if (data.session) {
-          // User was automatically signed in
-          setSuccess('Account created successfully!')
-          setTimeout(() => {
-            router.push('/dashboard')
-          }, 1500)
-        }
+        setSuccess('Account created! Please check your email to verify your account before signing in.')
       } else {
-        // Sign in existing user
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        })
-
-        if (signInError) {
-          throw signInError
-        }
-
         setSuccess('Signed in successfully!')
         setTimeout(() => {
-          router.push('/dashboard')
+          // Navigate to dashboard
+          window.location.href = '/dashboard'
         }, 1000)
       }
     } catch (error: any) {
-      console.error('Auth error:', error)
-      
-      // Handle specific Supabase error messages
-      let errorMessage = 'An error occurred. Please try again.'
-      
-      if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'Please check your email and click the confirmation link before signing in.'
-      } else if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Invalid email or password. Please try again.'
-      } else if (error.message.includes('User already registered')) {
-        errorMessage = 'An account with this email already exists. Try signing in instead.'
-      } else if (error.message.includes('Password should be at least 6 characters')) {
-        errorMessage = 'Password must be at least 6 characters long.'
-      } else if (error.message) {
-        errorMessage = error.message
-      }
-      
-      setError(errorMessage)
+      setError('An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -196,22 +169,37 @@ export default function LoginPage() {
       <header className="w-full border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <a href="/" className="flex items-center space-x-2">
+            <NavigationLink href="/" className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-md"></div>
               <span className="text-lg font-medium text-gray-900">FairForm</span>
-            </a>
+            </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="/features" className="text-sm text-gray-600 hover:text-gray-900">Features</a>
-              <a href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</a>
-              <a href="/about" className="text-sm text-gray-600 hover:text-gray-900">About</a>
+              <NavigationLink 
+                href="/product" 
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Product
+              </NavigationLink>
+              <NavigationLink 
+                href="/pricing" 
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Pricing
+              </NavigationLink>
+              <NavigationLink 
+                href="/about" 
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                About
+              </NavigationLink>
             </nav>
           </div>
 
           <div className="flex items-center space-x-4">
-            <a href="/login" className="text-sm text-gray-900 font-medium">
+            <span className="text-sm text-gray-900 font-medium">
               {isSignUp ? 'Sign up' : 'Log in'}
-            </a>
+            </span>
             <button
               onClick={handleModeSwitch}
               className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
@@ -272,7 +260,7 @@ export default function LoginPage() {
               transition={{ duration: 0.6 }}
               className="bg-white border border-gray-200 rounded-2xl p-8"
             >
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-6">
                 {isSignUp && (
                   <>
                     <div>
@@ -403,14 +391,14 @@ export default function LoginPage() {
                         Remember me
                       </label>
                     </div>
-                    <a href="/forgot-password" className="text-sm text-gray-600 hover:text-gray-900">
+                    <NavigationLink href="/forgot-password" className="text-sm text-gray-600 hover:text-gray-900">
                       Forgot password?
-                    </a>
+                    </NavigationLink>
                   </div>
                 )}
 
                 <button
-                  type="submit"
+                  onClick={handleSubmit}
                   disabled={loading}
                   className="w-full bg-black hover:bg-gray-800 text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -430,12 +418,16 @@ export default function LoginPage() {
                 {isSignUp && (
                   <p className="text-xs text-gray-500 text-center">
                     By creating an account, you agree to our{' '}
-                    <a href="/terms" className="text-gray-900 hover:underline">Terms of Service</a>
+                    <NavigationLink href="/terms" className="text-gray-900 hover:underline">
+                      Terms of Service
+                    </NavigationLink>
                     {' '}and{' '}
-                    <a href="/privacy" className="text-gray-900 hover:underline">Privacy Policy</a>
+                    <NavigationLink href="/privacy" className="text-gray-900 hover:underline">
+                      Privacy Policy
+                    </NavigationLink>
                   </p>
                 )}
-              </form>
+              </div>
 
               {/* Toggle */}
               <div className="mt-6 text-center">
@@ -468,28 +460,26 @@ export default function LoginPage() {
             <div className="space-y-6">
               {[
                 {
-                  icon: '⚡',
                   title: '60-second generation',
                   description: 'Create comprehensive policies faster than ever'
                 },
                 {
-                  icon: '🎯',
                   title: 'Industry-specific AI',
                   description: 'Agents trained on your industry regulations'
                 },
                 {
-                  icon: '🛡️',
                   title: 'Audit-ready documents',
                   description: 'Pass compliance audits with confidence'
                 },
                 {
-                  icon: '📈',
                   title: 'Scale with confidence',
                   description: 'From startup to enterprise, we grow with you'
                 }
               ].map((benefit, idx) => (
                 <div key={idx} className="flex items-start space-x-4">
-                  <div className="text-2xl">{benefit.icon}</div>
+                  <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                    <Check className="w-4 h-4 text-gray-600" />
+                  </div>
                   <div>
                     <h3 className="text-gray-900 font-semibold mb-1">{benefit.title}</h3>
                     <p className="text-gray-600 text-sm">{benefit.description}</p>
@@ -505,7 +495,7 @@ export default function LoginPage() {
               </div>
               <div className="flex items-center space-x-3 mb-3">
                 <Check className="w-5 h-5 text-green-600" />
-                <span className="text-gray-900 font-medium">No credit card required</span>
+                <span className="text-gray-900 font-medium">Expert-reviewed documents</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Check className="w-5 h-5 text-green-600" />
@@ -534,19 +524,96 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+      <footer className="border-t border-gray-100 bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
+            <div className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-md"></div>
               <span className="font-medium text-gray-900">FairForm</span>
             </div>
             
-            <div className="flex space-x-6 text-sm text-gray-600">
-              <a href="/privacy" className="hover:text-gray-900">Privacy Policy</a>
-              <a href="/terms" className="hover:text-gray-900">Terms of Service</a>
-              <a href="/contact" className="hover:text-gray-900">Contact</a>
-              <a href="/help" className="hover:text-gray-900">Help</a>
+            <div className="flex flex-wrap gap-6 text-sm text-gray-600">
+              <NavigationLink href="/privacy" className="hover:text-gray-900 transition-colors">
+                Privacy Policy
+              </NavigationLink>
+              <NavigationLink href="/terms" className="hover:text-gray-900 transition-colors">
+                Terms of Service
+              </NavigationLink>
+              <NavigationLink href="/contact" className="hover:text-gray-900 transition-colors">
+                Contact
+              </NavigationLink>
+              <NavigationLink href="/help" className="hover:text-gray-900 transition-colors">
+                Help
+              </NavigationLink>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-100 mt-8 pt-8 text-center text-sm text-gray-500">
+            <div className="flex flex-col items-center space-y-4">
+              {/* NDIS Badge */}
+              <div className="flex items-center justify-center space-x-6 mb-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-semibold text-blue-900">NDIS Compliant</div>
+                    <div className="text-xs text-blue-700">Registered Provider</div>
+                  </div>
+                </div>
+                
+                <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-2 flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-semibold text-green-900">Quality Assured</div>
+                    <div className="text-xs text-green-700">Industry Standards</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-xs text-gray-400 max-w-md">
+                * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
+              </div>
+              
+              <div>© 2024 FairForm. All rights reserved.</div>
+            </div>
+          </div>
+
+          {/* Legal Disclaimer */}
+          <div className="border-t border-gray-100 mt-8 pt-8">
+            <div className="bg-gray-50 rounded-lg p-6">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
+              <div className="text-xs text-gray-600 space-y-2 leading-relaxed">
+                <p>
+                  <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+                </p>
+                <p>
+                  <strong>Refund Policy:</strong> All sales are final. Due to the instant digital delivery nature of our products, refunds are not provided once documents have been downloaded. We encourage users to carefully review product descriptions and contact our support team with questions before purchasing.
+                </p>
+                <p>
+                  <strong>NDIS Compliance:</strong> Our NDIS document templates are designed to align with NDIS Practice Standards and Quality and Safeguards Framework. However, NDIS compliance requirements may vary by provider type and services offered. Users must ensure their specific obligations are met.
+                </p>
+                <p>
+                  <strong>Regulatory Compliance:</strong> While our documents are designed to align with current regulatory standards, compliance requirements vary by jurisdiction, industry, and specific business circumstances. Users are solely responsible for ensuring their policies meet applicable laws and regulations in their specific context.
+                </p>
+                <p>
+                  <strong>No Warranty:</strong> FairForm makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
+                </p>
+                <p>
+                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, FairForm, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
+                </p>
+                <p>
+                  <strong>User Responsibility:</strong> Users must review, customize, and validate all generated documents for their specific needs, applicable laws, and industry standards. Regular updates and reviews of policies are essential to maintain compliance as regulations evolve.
+                </p>
+                <p>
+                  <strong>Audit and Implementation:</strong> While our documents are designed to support your compliance efforts, users should conduct their own compliance audits and seek professional guidance for implementation and ongoing compliance monitoring.
+                </p>
+                <p className="pt-2 border-t border-gray-200">
+                  By using FairForm, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
+                </p>
+              </div>
             </div>
           </div>
         </div>
