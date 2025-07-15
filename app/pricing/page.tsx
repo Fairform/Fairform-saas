@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useAuth } from '@/hooks/useAuth'
+import Logo from '@/components/Logo'
 import { 
   Check, 
   ArrowRight, 
@@ -21,19 +23,29 @@ import {
 const useCheckout = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { user, session } = useAuth()
 
   const initiateCheckout = async (priceId: string, planName: string) => {
     setLoading(true)
     setError(null)
 
+    if (!user || !session) {
+      setError('Please log in to purchase a plan')
+      setLoading(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
         body: JSON.stringify({
           priceId,
-          userId: 'user-123', // Replace with actual user ID from auth
-          customerEmail: 'user@example.com', // Replace with actual user email
+          userId: user.id,
+          customerEmail: user.email,
           metadata: {
             planName,
             source: 'pricing_page'
@@ -114,6 +126,7 @@ export default function PricingPage() {
   const [pricingMode, setPricingMode] = useState('monthly') // 'monthly' or 'oneTime'
   const [billingCycle, setBillingCycle] = useState('monthly') // 'monthly' or 'yearly'
   const { initiateCheckout, loading, error } = useCheckout()
+  const { user } = useAuth()
 
   return (
     <div className="min-h-screen bg-white">
@@ -122,8 +135,7 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">FairForm</span>
+              <Logo width={24} height={24} />
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
