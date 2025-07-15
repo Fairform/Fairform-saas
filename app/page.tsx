@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useAuth } from '@/hooks/useAuth'
+import Logo from '@/components/Logo'
 import { 
   Check, 
   ArrowRight, 
@@ -75,6 +77,15 @@ const SubtleOrb = ({ className = '' }) => {
 }
 
 export default function HomePage() {
+  const { user, session } = useAuth()
+
+  const handleStartNow = () => {
+    if (!user || !session) {
+      window.location.href = '/signup'
+      return
+    }
+    window.location.href = '/dashboard'
+  }
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -82,8 +93,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">FairForm</span>
+              <Logo width={24} height={24} />
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -167,13 +177,13 @@ export default function HomePage() {
 
             {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <NavigationLink
-                href="/signup"
+              <button
+                onClick={handleStartNow}
                 className="bg-black hover:bg-gray-800 text-white font-medium px-8 py-4 rounded-lg transition-colors inline-flex items-center space-x-2 text-lg"
               >
                 <span>Start now</span>
                 <ArrowRight className="w-5 h-5" />
-              </NavigationLink>
+              </button>
               <button className="text-gray-700 hover:text-gray-900 font-medium px-8 py-4 transition-colors inline-flex items-center space-x-2">
                 <Play className="w-5 h-5" />
                 <span>See how it works</span>
@@ -269,7 +279,7 @@ export default function HomePage() {
                           >
                             <FileText className="w-5 h-5 text-green-600" />
                             <span className="font-medium text-gray-900">{doc}</span>
-                            <div className="ml-auto text-xs text-gray-500">2.3 KB</div>
+                            <div className="ml-auto text-[10px] text-gray-500">2.3 KB</div>
                           </motion.div>
                         ))}
                       </div>
@@ -692,7 +702,7 @@ export default function HomePage() {
                               <div className="text-sm text-gray-600">{testimonial.company}</div>
                             </div>
                             <div className="text-right">
-                              <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                              <div className="text-[10px] text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                 {testimonial.industry}
                               </div>
                             </div>
@@ -760,10 +770,7 @@ export default function HomePage() {
       <footer className="border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">FairForm</span>
-            </div>
+            <Logo width={24} height={24} />
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
               <NavigationLink href="/privacy" className="hover:text-gray-900 transition-colors">
@@ -806,7 +813,7 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <div className="text-xs text-gray-400 max-w-md">
+              <div className="text-[10px] text-gray-400 max-w-md">
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
@@ -818,7 +825,7 @@ export default function HomePage() {
           <div className="border-t border-gray-100 mt-8 pt-8">
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
-              <div className="text-xs text-gray-600 space-y-2 leading-relaxed">
+              <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
                   <strong>NDIS Compliance:</strong> Our NDIS document templates are designed to align with NDIS Practice Standards and Quality and Safeguards Framework. However, NDIS compliance requirements may vary by provider type and services offered. Users must ensure their specific obligations are met.
                 </p>

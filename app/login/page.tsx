@@ -438,7 +438,7 @@ export default function LoginPage() {
                 </button>
 
                 {isSignUp && (
-                  <p className="text-xs text-gray-500 text-center">
+                  <p className="text-[10px] text-gray-500 text-center">
                     By creating an account, you agree to our{' '}
                     <NavigationLink href="/terms" className="text-gray-900 hover:underline">
                       Terms of Service
@@ -595,7 +595,7 @@ export default function LoginPage() {
                 </div>
               </div>
               
-              <div className="text-xs text-gray-400 max-w-md">
+              <div className="text-[10px] text-gray-400 max-w-md">
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
@@ -607,7 +607,7 @@ export default function LoginPage() {
           <div className="border-t border-gray-100 mt-8 pt-8">
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
-              <div className="text-xs text-gray-600 space-y-2 leading-relaxed">
+              <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
                   <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>

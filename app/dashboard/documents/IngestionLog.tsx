@@ -112,7 +112,7 @@ export default function IngestionLog({ documentId, isOpen, onClose }: IngestionL
                             <h4 className="text-sm font-medium text-gray-900 capitalize">
                               {log.action.replace('_', ' ')}
                             </h4>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-[10px] text-gray-500">
                               {new Date(log.created_at).toLocaleTimeString()}
                             </span>
                           </div>
@@ -120,7 +120,7 @@ export default function IngestionLog({ documentId, isOpen, onClose }: IngestionL
                             {log.message}
                           </p>
                           {log.metadata && (
-                            <div className="mt-2 text-xs text-gray-500">
+                            <div className="mt-2 text-[10px] text-gray-500">
                               <pre className="whitespace-pre-wrap">
                                 {JSON.stringify(log.metadata, null, 2)}
                               </pre>

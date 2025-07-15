@@ -30,7 +30,7 @@ const useCheckout = () => {
     setError(null)
 
     if (!user || !session) {
-      setError('Please log in to purchase a plan')
+      window.location.href = '/login'
       setLoading(false)
       return
     }
@@ -405,8 +405,8 @@ export default function PricingPage() {
                   </button>
                   
                   <div className="text-center mt-3">
-                    <div className="text-xs text-gray-500">Instant download</div>
-                    <div className="text-xs text-gray-500">Lifetime access</div>
+                    <div className="text-[10px] text-gray-500">Instant download</div>
+                    <div className="text-[10px] text-gray-500">Lifetime access</div>
                   </div>
                 </div>
               ))}
@@ -565,8 +565,8 @@ export default function PricingPage() {
                   </button>
                   
                   <div className="text-center mt-3">
-                    <div className="text-xs text-gray-500">Cancel anytime</div>
-                    <div className="text-xs text-gray-500">No contracts or commitments</div>
+                    <div className="text-[10px] text-gray-500">Cancel anytime</div>
+                    <div className="text-[10px] text-gray-500">No contracts or commitments</div>
                   </div>
                 </div>
               ))}
@@ -828,7 +828,7 @@ export default function PricingPage() {
                 </div>
               </div>
               
-              <div className="text-xs text-gray-400 max-w-md">
+              <div className="text-[10px] text-gray-400 max-w-md">
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
@@ -840,7 +840,7 @@ export default function PricingPage() {
           <div className="border-t border-gray-100 mt-8 pt-8">
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
-              <div className="text-xs text-gray-600 space-y-2 leading-relaxed">
+              <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
                   <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
