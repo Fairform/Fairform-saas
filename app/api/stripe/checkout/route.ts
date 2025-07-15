@@ -34,6 +34,14 @@ export async function POST(req: Request) {
       }, { status: 400 })
     }
 
+    // Validate price ID format (should start with 'price_' and not be a placeholder)
+    if (!priceId.startsWith('price_') || priceId.includes('placeholder') || priceId.includes('_pack') || priceId.includes('_monthly')) {
+      return NextResponse.json({ 
+        error: 'Invalid pricing configuration',
+        details: 'This pricing plan is not yet configured. Please contact support or try again later.' 
+      }, { status: 400 })
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(customerEmail)) {

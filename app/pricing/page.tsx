@@ -56,7 +56,15 @@ const useCheckout = () => {
       const data = await response.json()
       
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session')
+        if (data.error === 'Invalid pricing configuration') {
+          setError('This plan is not yet available. Please contact support.')
+        } else if (data.error === 'Stripe not configured') {
+          setError('Payment system is currently unavailable. Please try again later.')
+        } else {
+          setError(data.details || data.error || 'Failed to create checkout session')
+        }
+        setLoading(false)
+        return
       }
       
       if (data.url) {
