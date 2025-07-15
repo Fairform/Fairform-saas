@@ -5,9 +5,15 @@ import Head from 'next/head'
 import { supabase } from '../../lib/supabase'
 import { CheckCircle, Download, FileText, ArrowRight } from 'lucide-react'
 
+interface DocumentData {
+  filename: string
+  fileSize: number
+  downloadUrl: string
+}
+
 export default function GenerateSuccess() {
   const [loading, setLoading] = useState(true)
-  const [document, setDocument] = useState(null)
+  const [document, setDocument] = useState<DocumentData | null>(null)
   const [error, setError] = useState('')
   const router = useRouter()
   const { session_id } = router.query
@@ -160,7 +166,7 @@ export default function GenerateSuccess() {
                   <span className="font-medium">Filename:</span> {document?.filename}
                 </div>
                 <div>
-                  <span className="font-medium">Size:</span> {Math.round(document?.fileSize / 1024)} KB
+                  <span className="font-medium">Size:</span> {Math.round((document?.fileSize || 0) / 1024)} KB
                 </div>
               </div>
             </div>
@@ -237,56 +243,4 @@ export default function GenerateSuccess() {
       </div>
     </>
   )
-}
-
-// pages/api/health.ts
-import { NextApiRequest, NextApiResponse } from 'next'
-import { supabaseAdmin } from '../../lib/supabase-admin'
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    // Test database connection
-    const { data, error } = await supabaseAdmin
-      .from('user_profiles')
-      .select('id')
-      .limit(1)
-
-    if (error) {
-      throw error
-    }
-
-    // Test LLM connection if URL is available
-    let llmStatus = 'unknown'
-    if (process.env.POCKETBOOK_LLM_API_URL) {
-      try {
-        const llmResponse = await fetch(process.env.POCKETBOOK_LLM_API_URL.replace('/generate', '/health'), {
-          method: 'GET',
-          timeout: 5000,
-        })
-        llmStatus = llmResponse.ok ? 'healthy' : 'unhealthy'
-      } catch {
-        llmStatus = 'unhealthy'
-      }
-    }
-
-    res.status(200).json({
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      services: {
-        database: 'healthy',
-        llm: llmStatus,
-        api: 'healthy'
-      }
-    })
-  } catch (error) {
-    console.error('Health check failed:', error)
-    res.status(500).json({
-      status: 'unhealthy',
-      timestamp: new Date().toISOString(),
-      error: error.message
-    })
-  }
 }

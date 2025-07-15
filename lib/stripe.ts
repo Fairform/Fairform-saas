@@ -187,6 +187,8 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
   }
 };
 
+export const PRICING_PLANS = STRIPE_PRODUCTS;
+
 // Helper functions for products
 export function getProductById(productId: string): StripeProduct | null {
   return STRIPE_PRODUCTS[productId] || null;
