@@ -30,8 +30,8 @@ const useCheckout = () => {
     setError(null)
 
     if (!user || !session) {
-      setError('Please log in to purchase a plan')
       setLoading(false)
+      window.location.href = '/login'
       return
     }
 
