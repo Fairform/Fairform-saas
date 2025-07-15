@@ -89,7 +89,7 @@ export default function DashboardPage() {
               
               <nav className="hidden md:flex items-center space-x-6">
                 <button className="text-sm text-gray-900 font-medium">Dashboard</button>
-                <button className="text-sm text-gray-600 hover:text-gray-900">Documents</button>
+                <a href="/dashboard/documents" className="text-sm text-gray-600 hover:text-gray-900">Documents</a>
                 <button className="text-sm text-gray-600 hover:text-gray-900">Compliance Agents</button>
               </nav>
             </div>

@@ -182,6 +182,9 @@ export interface Database {
           content: string | null
           document_type: string | null
           industry: string | null
+          format: string | null
+          file_url: string | null
+          business_info: Json | null
           metadata: Json | null
           created_at: string
           updated_at: string
@@ -193,6 +196,9 @@ export interface Database {
           content?: string | null
           document_type?: string | null
           industry?: string | null
+          format?: string | null
+          file_url?: string | null
+          business_info?: Json | null
           metadata?: Json | null
           created_at?: string
           updated_at?: string
@@ -202,6 +208,156 @@ export interface Database {
           content?: string | null
           document_type?: string | null
           industry?: string | null
+          format?: string | null
+          file_url?: string | null
+          business_info?: Json | null
+          metadata?: Json | null
+          updated_at?: string
+        }
+      }
+
+      user_documents: {
+        Row: {
+          id: string
+          user_id: string
+          file_name: string
+          file_path: string | null
+          document_type: string | null
+          industry: string | null
+          format: 'docx' | 'pdf' | 'xlsx' | null
+          download_url: string | null
+          download_count: number
+          status: 'uploaded' | 'queued' | 'processing' | 'complete' | 'failed' | 'under_review'
+          file_size: number | null
+          metadata: Json | null
+          deleted_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          file_name: string
+          file_path?: string | null
+          document_type?: string | null
+          industry?: string | null
+          format?: 'docx' | 'pdf' | 'xlsx' | null
+          download_url?: string | null
+          download_count?: number
+          status?: 'uploaded' | 'queued' | 'processing' | 'complete' | 'failed' | 'under_review'
+          file_size?: number | null
+          metadata?: Json | null
+          deleted_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          file_name?: string
+          file_path?: string | null
+          document_type?: string | null
+          industry?: string | null
+          format?: 'docx' | 'pdf' | 'xlsx' | null
+          download_url?: string | null
+          download_count?: number
+          status?: 'uploaded' | 'queued' | 'processing' | 'complete' | 'failed' | 'under_review'
+          file_size?: number | null
+          metadata?: Json | null
+          deleted_at?: string | null
+          updated_at?: string
+        }
+      }
+
+      agent_logs: {
+        Row: {
+          id: string
+          user_id: string
+          agent_id: string
+          question: string | null
+          response: string | null
+          context: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          agent_id: string
+          question?: string | null
+          response?: string | null
+          context?: Json | null
+          created_at?: string
+        }
+        Update: {
+          agent_id?: string
+          question?: string | null
+          response?: string | null
+          context?: Json | null
+        }
+      }
+
+      document_logs: {
+        Row: {
+          id: string
+          document_id: string
+          user_id: string
+          action: string
+          status: string
+          message: string | null
+          metadata: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          document_id: string
+          user_id: string
+          action: string
+          status: string
+          message?: string | null
+          metadata?: Json | null
+          created_at?: string
+        }
+        Update: {
+          action?: string
+          status?: string
+          message?: string | null
+          metadata?: Json | null
+        }
+      }
+
+      template_versions: {
+        Row: {
+          id: string
+          industry: string
+          document_title: string
+          content: string | null
+          file_path: string | null
+          uploaded_by: string | null
+          version: number
+          is_active: boolean
+          metadata: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          industry: string
+          document_title: string
+          content?: string | null
+          file_path?: string | null
+          uploaded_by?: string | null
+          version?: number
+          is_active?: boolean
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          industry?: string
+          document_title?: string
+          content?: string | null
+          file_path?: string | null
+          uploaded_by?: string | null
+          version?: number
+          is_active?: boolean
           metadata?: Json | null
           updated_at?: string
         }
