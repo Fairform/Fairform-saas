@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useAuth } from '@/hooks/useAuth'
+import Logo from '@/components/Logo'
 import { 
   Check, 
   ArrowRight, 
@@ -49,6 +51,15 @@ const SubtleOrb = ({ className = '' }) => {
 
 export default function ProductPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const { user, session } = useAuth()
+
+  const handleGetPack = (packId: string) => {
+    if (!user || !session) {
+      window.location.href = '/login'
+      return
+    }
+    window.location.href = '/pricing'
+  }
 
   const documentPacks = [
     {
@@ -284,8 +295,7 @@ export default function ProductPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <a href="/" className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">FairForm</span>
+              <Logo width={24} height={24} />
             </a>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -428,10 +438,10 @@ export default function ProductPage() {
                   </div>
                   <div className="mt-3 grid grid-cols-1 gap-1">
                     {pack.documents.slice(0, 3).map((doc, idx) => (
-                      <div key={idx} className="text-xs text-gray-600">• {doc}</div>
+                      <div key={idx} className="text-[10px] text-gray-600">• {doc}</div>
                     ))}
                     {pack.documents.length > 3 && (
-                      <div className="text-xs text-gray-500 font-medium">
+                      <div className="text-[10px] text-gray-500 font-medium">
                         +{pack.documents.length - 3} more documents
                       </div>
                     )}
@@ -452,8 +462,8 @@ export default function ProductPage() {
 
                 {/* Actions */}
                 <div className="flex items-center space-x-3">
-                  <a 
-                    href={`/pricing`}
+                  <button 
+                    onClick={() => handleGetPack(pack.id)}
                     className={`flex-1 py-3 px-6 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 group ${
                       pack.popular 
                         ? 'bg-black hover:bg-gray-800 text-white'
@@ -463,7 +473,7 @@ export default function ProductPage() {
                     <Package className="w-4 h-4" />
                     <span>Get This Pack</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </button>
                   <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition-colors">
                     <Play className="w-4 h-4" />
                   </button>
@@ -603,10 +613,7 @@ export default function ProductPage() {
       <footer className="border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">FairForm</span>
-            </div>
+            <Logo width={24} height={24} />
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
               <a href="/privacy" className="hover:text-gray-900">Privacy Policy</a>
@@ -641,7 +648,7 @@ export default function ProductPage() {
                 </div>
               </div>
               
-              <div className="text-xs text-gray-400 max-w-md">
+              <div className="text-[10px] text-gray-400 max-w-md">
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
@@ -653,7 +660,7 @@ export default function ProductPage() {
           <div className="border-t border-gray-100 mt-8 pt-8">
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
-              <div className="text-xs text-gray-600 space-y-2 leading-relaxed">
+              <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
                   <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
