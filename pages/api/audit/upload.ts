@@ -56,7 +56,7 @@ export default async function handler(
     const filePath = `audit_uploads/${auditSessionId}/${Date.now()}_${uploadedFile.originalFilename}`
     
     const uploadResult = await uploadFileToStorage(
-      'user_uploads',
+      'user-uploads',
       filePath,
       fileBuffer,
       mimeType
