@@ -1,6 +1,6 @@
-# FairForm SaaS - AI-Powered Compliance Policy Generator
+# Formative SaaS - AI-Powered Compliance Policy Generator
 
-FairForm is a comprehensive SaaS platform that generates audit-ready compliance policy documents in 60 seconds using AI. Built for small and medium businesses in regulated industries like NDIS, construction, childcare, and more.
+Formative is a comprehensive SaaS platform that generates audit-ready compliance policy documents in 60 seconds using AI. Built for small and medium businesses in regulated industries like NDIS, construction, childcare, and more.
 
 ## 🚀 Features
 
@@ -36,7 +36,7 @@ FairForm is a comprehensive SaaS platform that generates audit-ready compliance 
 
 ```bash
 git clone <your-repo-url>
-cd fairform-saas
+cd formative-saas
 npm install
 ```
 
@@ -243,7 +243,7 @@ npm run test:generate
 - `POST /api/webhooks/stripe` - Handle Stripe webhooks
 
 ### Authentication
-- `POST /api/auth/login` - Userfairform-saas/
+- `POST /api/auth/login` - Userformative-saas/
 ├── app/                    # Next.js App Router
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
@@ -286,8 +286,8 @@ MIT License - see LICENSE file for details.
 
 ## 📞 Support
 
-For support, email support@fairform.com or create an issue in the repository.
+For support, email support@formative.com or create an issue in the repository.
 
 ---
 
-**Disclaimer**: FairForm is not a law firm. Our documents are templates and should be reviewed by qualified legal professionals before use.
+**Disclaimer**: Formative is not a law firm. Our documents are templates and should be reviewed by qualified legal professionals before use.

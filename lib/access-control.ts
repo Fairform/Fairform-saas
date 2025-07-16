@@ -328,8 +328,8 @@ export async function getUserDocumentStats(userId: string): Promise<{
   }
 }
 
-// FairForm specific product access checks
-export const FAIRFORM_PRODUCTS = {
+// Formative specific product access checks
+export const FORMATIVE_PRODUCTS = {
   LITE_PACK: 'Lite Pack',
   PRO_PACK: 'Pro Pack', 
   NDIS_PACK: 'NDIS Full Pack',
@@ -339,10 +339,10 @@ export const FAIRFORM_PRODUCTS = {
   AGENCY_PLAN: 'Agency Plan'
 } as const
 
-export type FairFormProduct = typeof FAIRFORM_PRODUCTS[keyof typeof FAIRFORM_PRODUCTS]
+export type FormativeProduct = typeof FORMATIVE_PRODUCTS[keyof typeof FORMATIVE_PRODUCTS]
 
-// Check specific FairForm product access
-export async function checkFairFormAccess(userId: string, product: FairFormProduct): Promise<boolean> {
+// Check specific Formative product access
+export async function checkFormativeAccess(userId: string, product: FormativeProduct): Promise<boolean> {
   return checkUserAccess(userId, product)
 }
 
