@@ -39,15 +39,8 @@ export default function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container-width flex items-center justify-between py-4">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/fairform-logo.png"
-            alt="FairForm Logo"
-            width={36}
-            height={36}
-            className="w-9 h-9"
-            priority
-          />
-          <span className="font-heading font-bold text-xl text-gray-900">FairForm</span>
+          <span className="w-9 h-9 bg-black rounded-md flex items-center justify-center text-white font-bold text-sm">F</span>
+          <span className="font-heading font-bold text-xl text-gray-900">Formative</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">

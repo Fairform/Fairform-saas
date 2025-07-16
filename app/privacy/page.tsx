@@ -40,7 +40,7 @@ export default function PrivacyPage() {
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">FairForm</span>
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -106,7 +106,7 @@ export default function PrivacyPage() {
             <div>
               <h2 className="text-lg font-semibold text-blue-900 mb-2">Privacy Commitment Statement</h2>
               <p className="text-blue-700 mb-4">
-                FairForm Pty Ltd (ACN: [Company Number]) ("FairForm", "we", "our", or "us") is committed to protecting and respecting your privacy in accordance with the Privacy Act 1988 (Cth), the Australian Privacy Principles (APPs), the Notifiable Data Breaches scheme, and all applicable Australian privacy and data protection legislation.
+                Formative Pty Ltd (ACN: [Company Number]) ("Formative", "we", "our", or "us") is committed to protecting and respecting your privacy in accordance with the Privacy Act 1988 (Cth), the Australian Privacy Principles (APPs), the Notifiable Data Breaches scheme, and all applicable Australian privacy and data protection legislation.
               </p>
               <p className="text-blue-700">
                 This Privacy Policy has been prepared by our legal advisors to ensure full compliance with Australian privacy law and explains how we collect, use, store, disclose, and manage your personal information across all our digital platforms, services, and business operations.
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
                 <div className="space-y-3 text-sm text-gray-700">
                   <p><strong>"Personal Information"</strong> has the meaning given in section 6 of the Privacy Act 1988 (Cth) and includes any information or opinion about an identified individual, or an individual who is reasonably identifiable.</p>
                   <p><strong>"Sensitive Information"</strong> has the meaning given in section 6 of the Privacy Act 1988 (Cth) and includes health information, biometric information, and other categories specified in the Act.</p>
-                  <p><strong>"Services"</strong> means all software, applications, platforms, websites, APIs, databases, content, and related services provided by FairForm.</p>
+                  <p><strong>"Services"</strong> means all software, applications, platforms, websites, APIs, databases, content, and related services provided by Formative.</p>
                   <p><strong>"You"</strong> or "User" means any individual who accesses or uses our Services, whether as a registered user, visitor, or on behalf of an organisation.</p>
                   <p><strong>"Australian Privacy Principles" or "APPs"</strong> means the privacy principles set out in Schedule 1 of the Privacy Act 1988 (Cth).</p>
                 </div>
@@ -853,7 +853,7 @@ export default function PrivacyPage() {
                 <div className="space-y-3 text-gray-700">
                   <div className="flex items-start space-x-3">
                     <span className="font-semibold min-w-20">Email:</span>
-                    <span>privacy@fairform.ai</span>
+                    <span>privacy@formative.ai</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="font-semibold min-w-20">Phone:</span>
@@ -863,7 +863,7 @@ export default function PrivacyPage() {
                     <span className="font-semibold min-w-20">Post:</span>
                     <div>
                       <p>Privacy Officer</p>
-                      <p>FairForm Pty Ltd</p>
+                      <p>Formative Pty Ltd</p>
                       <p>[Company Address]</p>
                       <p>Australia</p>
                     </div>
@@ -909,7 +909,7 @@ export default function PrivacyPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">FairForm</span>
+              <span className="font-medium text-gray-900">Formative</span>
             </div>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
@@ -957,7 +957,7 @@ export default function PrivacyPage() {
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
-              <div>© 2024 FairForm. All rights reserved.</div>
+              <div>© 2024 Formative. All rights reserved.</div>
             </div>
           </div>
 
@@ -967,7 +967,7 @@ export default function PrivacyPage() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
               <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
-                  <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+                  <strong>Professional Advice:</strong> Formative provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
                 <p>
                   <strong>Refund Policy:</strong> All sales are final. Due to the instant digital delivery nature of our products, refunds are not provided once documents have been downloaded. We encourage users to carefully review product descriptions and contact our support team with questions before purchasing.
@@ -979,10 +979,10 @@ export default function PrivacyPage() {
                   <strong>Regulatory Compliance:</strong> While our documents are designed to align with current regulatory standards, compliance requirements vary by jurisdiction, industry, and specific business circumstances. Users are solely responsible for ensuring their policies meet applicable laws and regulations in their specific context.
                 </p>
                 <p>
-                  <strong>No Warranty:</strong> FairForm makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
+                  <strong>No Warranty:</strong> Formative makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
                 </p>
                 <p>
-                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, FairForm, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
+                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, Formative, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
                 </p>
                 <p>
                   <strong>User Responsibility:</strong> Users must review, customize, and validate all generated documents for their specific needs, applicable laws, and industry standards. Regular updates and reviews of policies are essential to maintain compliance as regulations evolve.
@@ -991,7 +991,7 @@ export default function PrivacyPage() {
                   <strong>Audit and Implementation:</strong> While our documents are designed to support your compliance efforts, users should conduct their own compliance audits and seek professional guidance for implementation and ongoing compliance monitoring.
                 </p>
                 <p className="pt-2 border-t border-gray-200">
-                  By using FairForm, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
+                  By using Formative, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
                 </p>
               </div>
             </div>

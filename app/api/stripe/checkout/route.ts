@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         priceId,
         productName: product.name,
         mode,
-        source: 'fairform_website',
+        source: 'formative_website',
         ...metadata,
       },
     }

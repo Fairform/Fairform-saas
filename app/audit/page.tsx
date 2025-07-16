@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, Building2, MapPin, Users, FileText, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react'
-import Logo from '@/components/Logo'
 import { AuditSession, AuditResults } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -219,7 +218,7 @@ export default function SmartAuditPage() {
       <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <NavigationLink href="/" className="flex items-center space-x-2">
-            <Logo width={24} height={24} />
+            <span className="text-lg font-medium text-gray-900">Formative</span>
           </NavigationLink>
           
           <div className="flex items-center space-x-4">
@@ -650,7 +649,7 @@ export default function SmartAuditPage() {
       <footer className="border-t border-gray-100 bg-white mt-16">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
-            <Logo width={24} height={24} />
+            <span className="text-lg font-medium text-gray-900">Formative</span>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
               <NavigationLink href="/privacy" className="hover:text-gray-900 transition-colors">
@@ -673,7 +672,7 @@ export default function SmartAuditPage() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
               <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
-                  <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+                  <strong>Professional Advice:</strong> Formative provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
                 <p>
                   <strong>Audit Accuracy:</strong> The Smart Compliance Audit is an automated assessment tool and may not identify all compliance gaps or requirements. Results should be verified by qualified professionals before making business decisions.
@@ -682,7 +681,7 @@ export default function SmartAuditPage() {
             </div>
             
             <div className="text-center text-sm text-gray-500 mt-6">
-              © 2024 FairForm. All rights reserved.
+              © 2024 Formative. All rights reserved.
             </div>
           </div>
         </div>

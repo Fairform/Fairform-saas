@@ -7,7 +7,7 @@ export const Footer = () => (
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-black rounded-md"></div>
-          <span className="font-medium text-gray-900">FairForm</span>
+          <span className="font-medium text-gray-900">Formative</span>
         </div>
         
         <div className="flex flex-wrap gap-6 text-sm text-gray-600">
@@ -55,7 +55,7 @@ export const Footer = () => (
             * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
           </div>
           
-          <div>© 2024 FairForm. All rights reserved.</div>
+          <div>© 2024 Formative. All rights reserved.</div>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export const Footer = () => (
           <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
           <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
             <p>
-              <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+              <strong>Professional Advice:</strong> Formative provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
             </p>
             <p>
               <strong>NDIS Compliance:</strong> Our NDIS document templates are designed to align with NDIS Practice Standards and Quality and Safeguards Framework. However, NDIS compliance requirements may vary by provider type and services offered. Users must ensure their specific obligations are met.
@@ -74,10 +74,10 @@ export const Footer = () => (
               <strong>Regulatory Compliance:</strong> While our documents are designed to align with current regulatory standards, compliance requirements vary by jurisdiction, industry, and specific business circumstances. Users are solely responsible for ensuring their policies meet applicable laws and regulations in their specific context.
             </p>
             <p>
-              <strong>No Warranty:</strong> FairForm makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
+              <strong>No Warranty:</strong> Formative makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
             </p>
             <p>
-              <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, FairForm, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
+              <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, Formative, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
             </p>
             <p>
               <strong>User Responsibility:</strong> Users must review, customize, and validate all generated documents for their specific needs, applicable laws, and industry standards. Regular updates and reviews of policies are essential to maintain compliance as regulations evolve.
@@ -86,7 +86,7 @@ export const Footer = () => (
               <strong>Audit and Implementation:</strong> While our documents are designed to support your compliance efforts, users should conduct their own compliance audits and seek professional guidance for implementation and ongoing compliance monitoring.
             </p>
             <p className="pt-2 border-t border-gray-200">
-              By using FairForm, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
+              By using Formative, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
             </p>
           </div>
         </div>

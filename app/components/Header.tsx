@@ -6,7 +6,7 @@ export const Header = () => (
       <div className="flex items-center space-x-8">
         <NavigationLink href="/" className="flex items-center space-x-2">
           <div className="w-6 h-6 bg-black rounded-md"></div>
-          <span className="text-lg font-medium text-gray-900">FairForm</span>
+          <span className="text-lg font-medium text-gray-900">Formative</span>
         </NavigationLink>
         
         <nav className="hidden md:flex items-center space-x-6">
