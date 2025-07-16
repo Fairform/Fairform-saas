@@ -95,7 +95,7 @@ export default function SmartAuditPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/audit/start', {
+      const response = await fetch(`${window.location.origin}/api/audit/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(businessData)
@@ -132,7 +132,7 @@ export default function SmartAuditPage() {
         formData.append('auditSessionId', auditSession.id)
         formData.append('sessionToken', auditSession.sessionToken)
 
-        const response = await fetch('/api/audit/upload', {
+        const response = await fetch(`${window.location.origin}/api/audit/upload`, {
           method: 'POST',
           body: formData
         })
@@ -160,7 +160,7 @@ export default function SmartAuditPage() {
     setIsProcessing(true)
 
     try {
-      const response = await fetch('/api/audit/process', {
+      const response = await fetch(`${window.location.origin}/api/audit/process`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
