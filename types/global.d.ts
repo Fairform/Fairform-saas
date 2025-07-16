@@ -1,4 +1,4 @@
-// Global type declarations for Fairform
+// Global type declarations for Formative
 declare namespace NodeJS {
   interface ProcessEnv {
     NEXT_PUBLIC_SUPABASE_URL: string;

@@ -135,7 +135,7 @@ export default function GenerateSuccess() {
   return (
     <>
       <Head>
-        <title>Document Generated Successfully - Fairform</title>
+        <title>Document Generated Successfully - Formative</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50">

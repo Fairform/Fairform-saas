@@ -107,7 +107,7 @@ export default function Generate() {
   return (
     <>
       <Head>
-        <title>Generate Document - Fairform</title>
+        <title>Generate Document - Formative</title>
         <meta name="description" content="Generate AI-powered compliance documents" />
       </Head>
 
