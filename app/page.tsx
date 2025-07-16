@@ -80,11 +80,7 @@ export default function HomePage() {
   const { user, session } = useAuth()
 
   const handleStartNow = () => {
-    if (!user || !session) {
-      window.location.href = '/signup'
-      return
-    }
-    window.location.href = '/dashboard'
+    window.location.href = '/audit'
   }
   return (
     <div className="min-h-screen bg-white">
@@ -97,6 +93,7 @@ export default function HomePage() {
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
+              <NavigationLink href="/audit" className="text-sm text-gray-600 hover:text-gray-900">Free Audit</NavigationLink>
               <NavigationLink href="/product" className="text-sm text-gray-600 hover:text-gray-900">Product</NavigationLink>
               <NavigationLink href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</NavigationLink>
               <NavigationLink href="/about" className="text-sm text-gray-600 hover:text-gray-900">About</NavigationLink>
@@ -181,9 +178,12 @@ export default function HomePage() {
                 onClick={handleStartNow}
                 className="bg-black hover:bg-gray-800 text-white font-medium px-8 py-4 rounded-lg transition-colors inline-flex items-center space-x-2 text-lg"
               >
-                <span>Start now</span>
+                <span>Check Your Compliance for Free</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
+              <div className="text-sm text-gray-500 mt-2">
+                Free audit • Upload existing policies • Get instant score
+              </div>
               <button className="text-gray-700 hover:text-gray-900 font-medium px-8 py-4 transition-colors inline-flex items-center space-x-2">
                 <Play className="w-5 h-5" />
                 <span>See how it works</span>
@@ -749,12 +749,15 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <NavigationLink
-                href="/signup"
+                href="/audit"
                 className="bg-black text-white hover:bg-gray-800 font-medium px-8 py-4 rounded-lg transition-colors inline-flex items-center space-x-2 text-lg"
               >
-                <span>Start now</span>
+                <span>Check Your Compliance Readiness</span>
                 <ArrowRight className="w-5 h-5" />
               </NavigationLink>
+              <div className="text-sm text-gray-500 mt-2">
+                Free audit • Upload existing policies • Get instant score
+              </div>
               <NavigationLink
                 href="/pricing"
                 className="border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-8 py-4 rounded-lg transition-colors inline-flex items-center space-x-2 text-lg"

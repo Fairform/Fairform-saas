@@ -115,6 +115,59 @@ export interface IndustrySchema {
   documents: string[];
 }
 
+export interface ComplianceBenchmark {
+  id: string;
+  industry: string;
+  subIndustry?: string;
+  requiredPolicies: string[];
+  scoringCriteria: {
+    policy_presence_weight: number;
+    content_quality_weight: number;
+    compliance_alignment_weight: number;
+    document_currency_weight: number;
+    minimum_passing_score: number;
+  };
+  metadata: any;
+}
+
+export interface AuditSession {
+  id: string;
+  sessionToken: string;
+  businessProfileId: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  complianceScore?: number;
+  auditResults?: AuditResults;
+}
+
+export interface AuditResults {
+  complianceScore: number;
+  missingPolicies: string[];
+  outdatedDocuments: Array<{
+    fileName: string;
+    issue: string;
+    recommendation: string;
+  }>;
+  completedChecks: string[];
+  recommendations: string[];
+  detailedAnalysis: {
+    policyPresenceScore: number;
+    contentQualityScore: number;
+    complianceAlignmentScore: number;
+    documentCurrencyScore: number;
+  };
+}
+
+export interface AuditFile {
+  id: string;
+  fileName: string;
+  filePath: string;
+  fileSize: number;
+  mimeType: string;
+  analysisResults?: any;
+  documentTypeDetected?: string;
+  qualityScore?: number;
+}
+
 export interface PocketbookResponse {
   text: string;
   usage?: {
