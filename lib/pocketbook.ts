@@ -58,7 +58,7 @@ export const callPocketbookLLM = async (
           timeout: TIMEOUT,
           headers: {
             'Content-Type': 'application/json',
-            'User-Agent': 'FairForm-SaaS/1.0',
+            'User-Agent': 'Formative-SaaS/1.0',
           },
           validateStatus: (status) => status < 500, // Don't throw on 4xx errors
         }

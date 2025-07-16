@@ -315,7 +315,7 @@ export async function createCheckoutSession({
         productName: product.name,
         productCategory: product.category,
         mode,
-        source: 'fairform_website',
+        source: 'formative_website',
         ...metadata,
       },
     };
