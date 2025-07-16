@@ -1,0 +1,18 @@
+Test Policy Document - Privacy Policy for Test Business Pty Ltd
+
+This is a sample privacy policy document for testing the Smart Upload & Audit Engine.
+
+1. Information Collection
+We collect personal information when you use our services.
+
+2. Information Use  
+We use your information to provide and improve our services.
+
+3. Information Sharing
+We do not share your personal information with third parties.
+
+4. Data Security
+We implement appropriate security measures to protect your information.
+
+5. Contact Information
+For questions about this policy, contact us at privacy@testbusiness.com.au

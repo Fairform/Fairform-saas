@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
-import Logo from '@/components/Logo'
 import { 
   Check, 
   ArrowRight, 
@@ -89,7 +88,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <Logo width={24} height={24} />
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -224,7 +223,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                   <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <div className="ml-4 text-sm text-gray-600 font-mono">fairform.ai</div>
+                  <div className="ml-4 text-sm text-gray-600 font-mono">formative.ai</div>
                 </div>
               </div>
               
@@ -302,7 +301,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                How FairForm works
+                How Formative works
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 From business details to compliance documents in three simple steps.
@@ -367,7 +366,7 @@ export default function HomePage() {
                 Built for every industry
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                FairForm understands the unique compliance requirements across diverse sectors.
+                Formative understands the unique compliance requirements across diverse sectors.
               </p>
             </div>
 
@@ -506,13 +505,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Why Choose FairForm */}
+        {/* Why Choose Formative */}
         <section className="py-20 px-6 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  Why businesses choose FairForm
+                  Why businesses choose Formative
                 </h2>
                 <div className="space-y-6">
                   {[
@@ -606,14 +605,14 @@ export default function HomePage() {
                 Loved by compliance teams worldwide
               </h2>
               <p className="text-xl text-gray-600">
-                See how FairForm is transforming compliance for businesses like yours.
+                See how Formative is transforming compliance for businesses like yours.
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  quote: "FairForm completely transformed our policy creation process. What used to take our team weeks now happens in minutes. The quality is outstanding and our recent audit was the smoothest we've ever had.",
+                  quote: "Formative completely transformed our policy creation process. What used to take our team weeks now happens in minutes. The quality is outstanding and our recent audit was the smoothest we've ever had.",
                   author: "Sarah Johnson",
                   role: "Compliance Director",
                   company: "HealthCare Plus",
@@ -622,7 +621,7 @@ export default function HomePage() {
                   highlight: "Reduced policy creation time by 95%"
                 },
                 {
-                  quote: "As an NDIS provider, compliance is critical. FairForm understands the nuances of NDIS requirements better than any consultant we've worked with. It's like having a compliance expert on our team 24/7.",
+                  quote: "As an NDIS provider, compliance is critical. Formative understands the nuances of NDIS requirements better than any consultant we've worked with. It's like having a compliance expert on our team 24/7.",
                   author: "Michael Chen",
                   role: "Operations Manager", 
                   company: "Support Services Co.",
@@ -640,7 +639,7 @@ export default function HomePage() {
                   highlight: "Improved policy quality significantly"
                 },
                 {
-                  quote: "We've rolled out FairForm across all our sites. The consistency and quality of documentation has improved dramatically. Our insurance premiums even decreased due to better risk management.",
+                  quote: "We've rolled out Formative across all our sites. The consistency and quality of documentation has improved dramatically. Our insurance premiums even decreased due to better risk management.",
                   author: "David Rodriguez",
                   role: "Risk Manager",
                   company: "Metro Transport Group",
@@ -649,7 +648,7 @@ export default function HomePage() {
                   highlight: "Reduced insurance premiums by 15%"
                 },
                 {
-                  quote: "FairForm saved us thousands in consulting fees. The documents are professional, thorough, and specifically tailored to our industry. Our staff actually read and follow these policies.",
+                  quote: "Formative saved us thousands in consulting fees. The documents are professional, thorough, and specifically tailored to our industry. Our staff actually read and follow these policies.",
                   author: "Lisa Thompson",
                   role: "HR Director",
                   company: "Coastal Hospitality",
@@ -745,7 +744,7 @@ export default function HomePage() {
               Ready to transform your compliance?
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join hundreds of businesses already using FairForm to create professional compliance documents with AI.
+              Join hundreds of businesses already using Formative to create professional compliance documents with AI.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <NavigationLink
@@ -773,7 +772,7 @@ export default function HomePage() {
       <footer className="border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
-            <Logo width={24} height={24} />
+            <span className="text-lg font-medium text-gray-900">Formative</span>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
               <NavigationLink href="/privacy" className="hover:text-gray-900 transition-colors">
@@ -820,7 +819,7 @@ export default function HomePage() {
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
-              <div>© 2024 FairForm. All rights reserved.</div>
+              <div>© 2024 Formative. All rights reserved.</div>
             </div>
           </div>
 
@@ -833,16 +832,16 @@ export default function HomePage() {
                   <strong>NDIS Compliance:</strong> Our NDIS document templates are designed to align with NDIS Practice Standards and Quality and Safeguards Framework. However, NDIS compliance requirements may vary by provider type and services offered. Users must ensure their specific obligations are met.
                 </p>
                 <p>
-                  <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+                  <strong>Professional Advice:</strong> Formative provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
                 <p>
                   <strong>Regulatory Compliance:</strong> While our documents are designed to align with current regulatory standards, compliance requirements vary by jurisdiction, industry, and specific business circumstances. Users are solely responsible for ensuring their policies meet applicable laws and regulations in their specific context.
                 </p>
                 <p>
-                  <strong>No Warranty:</strong> FairForm makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
+                  <strong>No Warranty:</strong> Formative makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
                 </p>
                 <p>
-                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, FairForm, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
+                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, Formative, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
                 </p>
                 <p>
                   <strong>User Responsibility:</strong> Users must review, customize, and validate all generated documents for their specific needs, applicable laws, and industry standards. Regular updates and reviews of policies are essential to maintain compliance as regulations evolve.
@@ -851,7 +850,7 @@ export default function HomePage() {
                   <strong>Audit and Implementation:</strong> While our documents are designed to be audit-ready, users should conduct their own compliance audits and seek professional guidance for implementation and ongoing compliance monitoring.
                 </p>
                 <p className="pt-2 border-t border-gray-200">
-                  By using FairForm, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
+                  By using Formative, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
                 </p>
               </div>
             </div>

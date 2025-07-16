@@ -11,25 +11,25 @@ export default function AboutPage() {
 
       <main className="pt-32 pb-24 px-6">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6">About FairForm</h1>
+          <h1 className="text-4xl font-bold mb-6">About Formative</h1>
 
           <p className="text-gray-700 mb-6">
-            FairForm is building the future of intelligent compliance. Our mission is to empower small businesses and growing organizations with professional, audit-ready policies—instantly generated, always up-to-date, and tailored to your specific industry needs.
+            Formative is building the future of intelligent compliance. Our mission is to empower small businesses and growing organizations with professional, audit-ready policies—instantly generated, always up-to-date, and tailored to your specific industry needs.
           </p>
 
           <h2 className="text-2xl font-semibold mt-10 mb-4">Our Vision</h2>
           <p className="text-gray-700 mb-6">
-            We believe compliance shouldn't be a burden. With FairForm, we're transforming regulatory paperwork from a painful process into a seamless experience powered by AI. Our vision is to be the global standard in policy generation, helping companies of all sizes remain compliant, confident, and competitive.
+            We believe compliance shouldn't be a burden. With Formative, we're transforming regulatory paperwork from a painful process into a seamless experience powered by AI. Our vision is to be the global standard in policy generation, helping companies of all sizes remain compliant, confident, and competitive.
           </p>
 
           <h2 className="text-2xl font-semibold mt-10 mb-4">Who We Serve</h2>
           <p className="text-gray-700 mb-6">
-            From disability service providers and NDIS startups to construction firms, educators, clinics, and e-commerce retailers—FairForm is trusted across a wide range of industries. Whether you're just getting started or scaling nationally, we offer compliance infrastructure built for real-world business needs.
+            From disability service providers and NDIS startups to construction firms, educators, clinics, and e-commerce retailers—Formative is trusted across a wide range of industries. Whether you're just getting started or scaling nationally, we offer compliance infrastructure built for real-world business needs.
           </p>
 
           <h2 className="text-2xl font-semibold mt-10 mb-4">Our Technology</h2>
           <p className="text-gray-700 mb-6">
-            FairForm leverages advanced AI agents, real-time regulatory updates, and customizable templates to deliver policies that are smart, contextual, and legally sound. Built on a secure infrastructure with privacy-first principles, we ensure your data and documents remain protected and professional.
+            Formative leverages advanced AI agents, real-time regulatory updates, and customizable templates to deliver policies that are smart, contextual, and legally sound. Built on a secure infrastructure with privacy-first principles, we ensure your data and documents remain protected and professional.
           </p>
 
           <h2 className="text-2xl font-semibold mt-10 mb-4">Backed by Purpose</h2>
@@ -42,13 +42,13 @@ export default function AboutPage() {
             Want to learn more, partner with us, or request a custom solution? We're here to help.
           </p>
           <address className="text-gray-700 not-italic mb-12 leading-relaxed">
-            FairForm Pty Ltd<br />
+            Formative Pty Ltd<br />
             123 Policy Street<br />
             Sydney, NSW 2000<br />
             Australia<br />
             Email:{' '}
-            <a href="mailto:hello@fairform.com" className="text-blue-600 underline">
-              hello@fairform.com
+            <a href="mailto:hello@formative.com" className="text-blue-600 underline">
+              hello@formative.com
             </a>
           </address>
 

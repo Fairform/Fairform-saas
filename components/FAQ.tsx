@@ -56,7 +56,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Everything you need to know about FairForm and our compliance document generation service.
+            Everything you need to know about Formative and our compliance document generation service.
           </p>
         </motion.div>
 
@@ -128,7 +128,7 @@ export default function FAQ() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:support@fairform.com"
+                href="mailto:support@formative.com"
                 className="btn-primary"
               >
                 Contact Support

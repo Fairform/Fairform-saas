@@ -38,14 +38,10 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1 space-y-6">
             <Link href="/" className="flex items-center space-x-2">
-              <Image
-                src="/fairform-logo.png"
-                alt="FairForm Logo"
-                width={36}
-                height={36}
-                className="w-9 h-9"
-              />
-              <span className="font-heading font-bold text-xl">FairForm</span>
+              <div className="w-9 h-9 bg-black rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-sm">F</span>
+              </div>
+              <span className="font-heading font-bold text-xl">Formative</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               AI-powered compliance policy generator for businesses in regulated industries. 
@@ -53,7 +49,7 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://twitter.com/fairform"
+                href="https://twitter.com/formative"
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="Twitter"
               >
@@ -62,7 +58,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://linkedin.com/company/fairform"
+                href="https://linkedin.com/company/formative"
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="LinkedIn"
               >
@@ -71,7 +67,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://github.com/fairform"
+                href="https://github.com/formative"
                 className="text-gray-400 hover:text-white transition-colors"
                 aria-label="GitHub"
               >
@@ -106,7 +102,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              © {currentYear} FairForm. All rights reserved.
+              © {currentYear} Formative. All rights reserved.
             </div>
             <div className="flex items-center space-x-6 text-sm text-gray-400">
               <span>Made with ❤️ in Australia</span>
@@ -121,7 +117,7 @@ export default function Footer() {
       <div className="bg-gray-800 py-4">
         <div className="container-width">
           <p className="text-xs text-gray-500 text-center">
-            <strong>Disclaimer:</strong> FairForm is not a law firm. Our documents are templates and should be reviewed by qualified legal professionals before use.
+            <strong>Disclaimer:</strong> Formative is not a law firm. Our documents are templates and should be reviewed by qualified legal professionals before use.
           </p>
         </div>
       </div>

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Check, ArrowRight, AlertCircle, Shield } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import Logo from '@/components/Logo'
 
 // Navigation helper component (matching pricing page)
 const NavigationLink = ({ href, children, className, onClick }: { 
@@ -193,7 +192,7 @@ export default function LoginPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <Logo width={24} height={24} />
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -247,7 +246,7 @@ export default function LoginPage() {
               <p className="text-lg text-gray-600">
                 {isSignUp 
                   ? 'Start generating compliance documents in minutes' 
-                  : 'Sign in to your FairForm account'
+                  : 'Sign in to your Formative account'
                 }
               </p>
             </div>
@@ -537,7 +536,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <blockquote className="text-gray-600 text-sm">
-                "FairForm reduced our policy creation time from 3 weeks to 2 minutes. 
+                "Formative reduced our policy creation time from 3 weeks to 2 minutes. 
                 The AI understands NDIS requirements perfectly."
               </blockquote>
             </div>
@@ -551,7 +550,7 @@ export default function LoginPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">FairForm</span>
+              <span className="font-medium text-gray-900">Formative</span>
             </div>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
@@ -599,7 +598,7 @@ export default function LoginPage() {
                 * Compliance badges represent our commitment to industry standards. Users should verify specific requirements for their registration status.
               </div>
               
-              <div>© 2024 FairForm. All rights reserved.</div>
+              <div>© 2024 Formative. All rights reserved.</div>
             </div>
           </div>
 
@@ -609,7 +608,7 @@ export default function LoginPage() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Important Legal Disclaimer</h3>
               <div className="text-[10px] text-gray-600 space-y-2 leading-relaxed">
                 <p>
-                  <strong>Professional Advice:</strong> FairForm provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
+                  <strong>Professional Advice:</strong> Formative provides AI-generated compliance documents for informational purposes only. These documents do not constitute legal, professional, or regulatory advice. Users should always consult with qualified legal professionals, compliance specialists, or industry experts before implementing any policies or procedures.
                 </p>
                 <p>
                   <strong>Refund Policy:</strong> All sales are final. Due to the instant digital delivery nature of our products, refunds are not provided once documents have been downloaded. We encourage users to carefully review product descriptions and contact our support team with questions before purchasing.
@@ -621,10 +620,10 @@ export default function LoginPage() {
                   <strong>Regulatory Compliance:</strong> While our documents are designed to align with current regulatory standards, compliance requirements vary by jurisdiction, industry, and specific business circumstances. Users are solely responsible for ensuring their policies meet applicable laws and regulations in their specific context.
                 </p>
                 <p>
-                  <strong>No Warranty:</strong> FairForm makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
+                  <strong>No Warranty:</strong> Formative makes no warranties, express or implied, regarding the accuracy, completeness, or fitness for purpose of generated documents. We do not guarantee that our documents will ensure regulatory compliance or prevent legal issues.
                 </p>
                 <p>
-                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, FairForm, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
+                  <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, Formative, its officers, employees, and affiliates shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use of our platform or generated documents.
                 </p>
                 <p>
                   <strong>User Responsibility:</strong> Users must review, customize, and validate all generated documents for their specific needs, applicable laws, and industry standards. Regular updates and reviews of policies are essential to maintain compliance as regulations evolve.
@@ -633,7 +632,7 @@ export default function LoginPage() {
                   <strong>Audit and Implementation:</strong> While our documents are designed to support your compliance efforts, users should conduct their own compliance audits and seek professional guidance for implementation and ongoing compliance monitoring.
                 </p>
                 <p className="pt-2 border-t border-gray-200">
-                  By using FairForm, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
+                  By using Formative, you acknowledge that you have read, understood, and agree to these terms. You confirm that you will seek appropriate professional advice and conduct proper due diligence before implementing any generated documents.
                 </p>
               </div>
             </div>

@@ -108,7 +108,7 @@ function ConfirmEmailContent() {
 
         <div className="mt-6 text-center">
           <a href="/" className="text-gray-600 hover:text-gray-900 text-sm">
-            ← Back to FairForm
+            ← Back to Formative
           </a>
         </div>
       </div>

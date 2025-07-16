@@ -243,7 +243,7 @@ npm run test:generate
 - `POST /api/webhooks/stripe` - Handle Stripe webhooks
 
 ### Authentication
-- `POST /api/auth/login` - Userfairform-saas/
+- `POST /api/auth/login` - Userformative-saas/
 ├── app/                    # Next.js App Router
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout

@@ -17,13 +17,13 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: 'FairForm - AI-Powered Compliance Policy Generator',
+  title: 'Formative - AI-Powered Compliance Policy Generator',
   description:
     'Generate audit-ready compliance policy documents in 60 seconds using AI. Built for small and medium businesses in regulated industries.',
   keywords: ['compliance', 'policy', 'NDIS', 'construction', 'childcare', 'AI', 'documents'],
-  authors: [{ name: 'FairForm' }],
-  creator: 'FairForm',
-  publisher: 'FairForm',
+  authors: [{ name: 'Formative' }],
+  creator: 'Formative',
+  publisher: 'Formative',
   robots: {
     index: true,
     follow: true,
@@ -31,22 +31,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_AU',
-    url: 'https://fairform.com',
-    siteName: 'FairForm',
-    title: 'FairForm - AI-Powered Compliance Policy Generator',
+    url: 'https://formative.com',
+    siteName: 'Formative',
+    title: 'Formative - AI-Powered Compliance Policy Generator',
     description: 'Generate audit-ready compliance policy documents in 60 seconds using AI.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'FairForm - AI-Powered Compliance',
+        alt: 'Formative - AI-Powered Compliance',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FairForm - AI-Powered Compliance Policy Generator',
+    title: 'Formative - AI-Powered Compliance Policy Generator',
     description: 'Generate audit-ready compliance policy documents in 60 seconds using AI.',
     images: ['/og-image.jpg'],
   },
