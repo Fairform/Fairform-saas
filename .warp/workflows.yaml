@@ -1,0 +1,12 @@
+# .warp/workflows.yaml
+
+workflows:
+  - name: Start Fairform Dev Server
+    command: |
+      cd Fairform-saas
+      pnpm install
+      cp .env.example .env.local || echo ".env already exists"
+      pnpm dev
+    description: Start the Fairform local development server using PNPM and .env.local.
+    tags: [fairform, dev, local]
+    author: The Systems Company
