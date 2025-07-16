@@ -12,7 +12,8 @@ import {
   Plus,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Shield
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
@@ -186,21 +187,21 @@ export default function DashboardPage() {
             </button>
           </motion.div>
 
-          {/* Compliance Agents */}
+          {/* Smart Audit */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             className="bg-white rounded-lg p-6 border border-gray-200"
           >
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Compliance Agents</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Smart Audit</h2>
             <p className="text-gray-600 mb-6">
-              Get expert guidance from our AI compliance specialists trained on Australian regulations.
+              Upload existing policies for AI-powered compliance audit and gap analysis.
             </p>
-            <button className="w-full bg-gray-100 text-gray-900 py-3 px-6 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
-              <MessageSquare className="w-4 h-4" />
-              <span>Chat with Agents</span>
-            </button>
+            <a href="/audit" className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+              <Shield className="w-4 h-4" />
+              <span>Start Free Audit</span>
+            </a>
           </motion.div>
         </div>
 
