@@ -27,6 +27,8 @@ export default function Header() {
   }, [])
 
   const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'Smart Audit', href: '/audit' },
     { name: 'Industries', href: '/products' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'Templates', href: '/templates' },
