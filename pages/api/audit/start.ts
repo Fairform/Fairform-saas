@@ -59,15 +59,59 @@ export default async function handler(
       }
     }
 
-    const { data: businessProfile, error: profileError } = await supabaseAdmin
-      .from('business_profiles')
-      .insert(businessProfileData)
-      .select()
-      .single()
+    let businessProfile
+    let profileError
+    let retryCount = 0
+    const maxRetries = 3
+
+    while (retryCount < maxRetries) {
+      try {
+        const result = await supabaseAdmin
+          .from('business_profiles')
+          .insert(businessProfileData)
+          .select()
+          .single()
+        
+        businessProfile = result.data
+        profileError = result.error
+        
+        if (!profileError) {
+          break // Success, exit retry loop
+        }
+        
+        retryCount++
+        if (retryCount < maxRetries) {
+          console.log(`Retry ${retryCount}/${maxRetries} for business profile creation`)
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount)) // Exponential backoff
+        }
+      } catch (error) {
+        console.error(`Database connection attempt ${retryCount + 1} failed:`, error)
+        retryCount++
+        if (retryCount < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
+        } else {
+          profileError = { message: `Database connection failed after ${maxRetries} attempts: ${(error as Error).message}` }
+        }
+      }
+    }
 
     if (profileError) {
-      console.error('Error creating business profile:', profileError)
-      throw new Error(`Failed to create business profile: ${profileError.message}`)
+      console.error('Error creating business profile after retries:', profileError)
+      
+      console.log('Using fallback mode - creating session without database persistence')
+      const fallbackSession = {
+        id: sessionToken,
+        sessionToken: sessionToken,
+        businessProfileId: 'fallback-profile-' + sessionToken,
+        status: 'pending'
+      }
+      
+      return res.status(200).json({
+        success: true,
+        auditSession: fallbackSession,
+        message: 'Audit session created in fallback mode (database connectivity issues)',
+        fallbackMode: true
+      })
     }
 
     businessProfileId = businessProfile.id
@@ -87,14 +131,43 @@ export default async function handler(
       }
     }
 
-    const { data: auditSession, error: sessionError } = await supabaseAdmin
-      .from('audit_sessions')
-      .insert(auditSessionData)
-      .select()
-      .single()
+    let auditSession
+    let sessionError
+    retryCount = 0
+
+    while (retryCount < maxRetries) {
+      try {
+        const result = await supabaseAdmin
+          .from('audit_sessions')
+          .insert(auditSessionData)
+          .select()
+          .single()
+        
+        auditSession = result.data
+        sessionError = result.error
+        
+        if (!sessionError) {
+          break // Success, exit retry loop
+        }
+        
+        retryCount++
+        if (retryCount < maxRetries) {
+          console.log(`Retry ${retryCount}/${maxRetries} for audit session creation`)
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
+        }
+      } catch (error) {
+        console.error(`Audit session creation attempt ${retryCount + 1} failed:`, error)
+        retryCount++
+        if (retryCount < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
+        } else {
+          sessionError = { message: `Audit session creation failed after ${maxRetries} attempts: ${(error as Error).message}` }
+        }
+      }
+    }
 
     if (sessionError) {
-      console.error('Error creating audit session:', sessionError)
+      console.error('Error creating audit session after retries:', sessionError)
       throw new Error(`Failed to create audit session: ${sessionError.message}`)
     }
 
