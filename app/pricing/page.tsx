@@ -17,6 +17,7 @@ import {
   Clock,
   MessageCircle
 } from 'lucide-react'
+import Logo from '../../components/Logo'
 
 // Checkout hook
 const useCheckout = () => {
@@ -782,8 +783,7 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">Formative</span>
+              <Logo width={24} height={24} showText={true} />
             </div>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">

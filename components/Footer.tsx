@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import Logo from './Logo'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -38,10 +39,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1 space-y-6">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-9 h-9 bg-black rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
-              </div>
-              <span className="font-heading font-bold text-xl">Formative</span>
+              <Logo width={36} height={36} showText={true} />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed">
               AI-powered compliance policy generator for businesses in regulated industries. 
