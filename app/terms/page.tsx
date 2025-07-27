@@ -1,6 +1,7 @@
 'use client'
 
 import { Shield, Check, Scale, AlertTriangle, FileText, Users, Lock, Globe, Gavel, CreditCard } from 'lucide-react'
+import Logo from '../../components/Logo'
 
 // Navigation helper component (matching other pages)
 const NavigationLink = ({ href, children, className, onClick }: { 
@@ -39,8 +40,7 @@ export default function TermsPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="text-lg font-medium text-gray-900">Formative</span>
+              <Logo width={24} height={24} showText={true} />
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -1029,8 +1029,7 @@ export default function TermsPage() {
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-black rounded-md"></div>
-              <span className="font-medium text-gray-900">Formative</span>
+              <Logo width={24} height={24} showText={true} />
             </div>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
