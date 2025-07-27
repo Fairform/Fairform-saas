@@ -75,12 +75,22 @@ export default async function handler(
     
     const filePath = `audit_uploads/${auditSessionId}/${Date.now()}_${uploadedFile.originalFilename}`
     
-    const uploadResult = await uploadFileToStorage(
-      'user-uploads',
-      filePath,
-      fileBuffer,
-      mimeType
-    )
+    let uploadResult
+    if (isFallbackSession) {
+      uploadResult = {
+        path: filePath,
+        publicUrl: `https://fallback-storage.example.com/${filePath}`,
+        success: true
+      }
+      console.log('Using fallback storage for file upload:', uploadResult.path)
+    } else {
+      uploadResult = await uploadFileToStorage(
+        'user-uploads',
+        filePath,
+        fileBuffer,
+        mimeType
+      )
+    }
 
     let auditFile
     if (isFallbackSession) {
