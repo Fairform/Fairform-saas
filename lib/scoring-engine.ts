@@ -72,7 +72,8 @@ export async function getComplianceBenchmark(industry: string, subIndustry?: str
 
     if (error) {
       console.warn(`No compliance benchmark found for industry: ${industry}`, error)
-      return null
+      console.log('Using fallback compliance benchmark for industry:', industry)
+      return getFallbackComplianceBenchmark(industry, subIndustry)
     }
 
     return {
@@ -91,8 +92,135 @@ export async function getComplianceBenchmark(industry: string, subIndustry?: str
     }
   } catch (error) {
     console.error('Error fetching compliance benchmark:', error)
-    return null
+    console.log('Database connectivity failed, using fallback compliance benchmark for industry:', industry)
+    return getFallbackComplianceBenchmark(industry, subIndustry)
   }
+}
+
+function getFallbackComplianceBenchmark(industry: string, subIndustry?: string): ComplianceBenchmark {
+  const fallbackBenchmarks: Record<string, ComplianceBenchmark> = {
+    'NDIS': {
+      id: 'fallback-ndis',
+      industry: 'NDIS',
+      subIndustry: subIndustry || 'Disability Support Services',
+      requiredPolicies: [
+        'NDIS Practice Standards Compliance',
+        'Privacy Policy',
+        'Work Health & Safety Policy',
+        'Code of Conduct',
+        'Incident Management Policy',
+        'Complaints Management Policy',
+        'Risk Management Policy',
+        'Quality Management Policy'
+      ],
+      scoringCriteria: {
+        policy_presence_weight: 40,
+        content_quality_weight: 30,
+        compliance_alignment_weight: 20,
+        document_currency_weight: 10,
+        minimum_passing_score: 75
+      },
+      metadata: { fallbackMode: true, industry: 'NDIS' }
+    },
+    'aged-care': {
+      id: 'fallback-aged-care',
+      industry: 'aged-care',
+      subIndustry: subIndustry || 'Residential Aged Care',
+      requiredPolicies: [
+        'Aged Care Quality Standards Compliance',
+        'Privacy Policy',
+        'Work Health & Safety Policy',
+        'Clinical Governance Policy',
+        'Medication Management Policy',
+        'Infection Control Policy',
+        'Restraint Policy',
+        'Complaints Management Policy'
+      ],
+      scoringCriteria: {
+        policy_presence_weight: 45,
+        content_quality_weight: 25,
+        compliance_alignment_weight: 20,
+        document_currency_weight: 10,
+        minimum_passing_score: 80
+      },
+      metadata: { fallbackMode: true, industry: 'aged-care' }
+    },
+    'healthcare': {
+      id: 'fallback-healthcare',
+      industry: 'healthcare',
+      subIndustry: subIndustry || 'General Healthcare',
+      requiredPolicies: [
+        'Clinical Governance Policy',
+        'Privacy Policy',
+        'Work Health & Safety Policy',
+        'Infection Control Policy',
+        'Patient Safety Policy',
+        'Medical Records Policy',
+        'Consent Policy',
+        'Complaints Management Policy'
+      ],
+      scoringCriteria: {
+        policy_presence_weight: 40,
+        content_quality_weight: 30,
+        compliance_alignment_weight: 20,
+        document_currency_weight: 10,
+        minimum_passing_score: 75
+      },
+      metadata: { fallbackMode: true, industry: 'healthcare' }
+    },
+    'construction': {
+      id: 'fallback-construction',
+      industry: 'construction',
+      subIndustry: subIndustry || 'General Construction',
+      requiredPolicies: [
+        'Work Health & Safety Policy',
+        'Environmental Management Policy',
+        'Quality Management Policy',
+        'Risk Management Policy',
+        'Emergency Response Policy',
+        'Training and Competency Policy',
+        'Subcontractor Management Policy',
+        'Incident Reporting Policy'
+      ],
+      scoringCriteria: {
+        policy_presence_weight: 50,
+        content_quality_weight: 25,
+        compliance_alignment_weight: 15,
+        document_currency_weight: 10,
+        minimum_passing_score: 70
+      },
+      metadata: { fallbackMode: true, industry: 'construction' }
+    },
+    'childcare': {
+      id: 'fallback-childcare',
+      industry: 'childcare',
+      subIndustry: subIndustry || 'Early Childhood Education',
+      requiredPolicies: [
+        'Child Protection Policy',
+        'Privacy Policy',
+        'Work Health & Safety Policy',
+        'Behaviour Guidance Policy',
+        'Nutrition and Food Safety Policy',
+        'Sleep and Rest Policy',
+        'Excursion Policy',
+        'Emergency Management Policy'
+      ],
+      scoringCriteria: {
+        policy_presence_weight: 45,
+        content_quality_weight: 25,
+        compliance_alignment_weight: 20,
+        document_currency_weight: 10,
+        minimum_passing_score: 80
+      },
+      metadata: { fallbackMode: true, industry: 'childcare' }
+    }
+  }
+
+  const benchmark = fallbackBenchmarks[industry.toLowerCase()] || fallbackBenchmarks['NDIS']
+  
+  console.log(`Using fallback benchmark for ${industry}:`, benchmark.requiredPolicies.length, 'required policies')
+  
+  return benchmark
 }
 
 export async function analyzeUploadedFiles(files: AuditFile[], businessProfile: BusinessProfile): Promise<AuditFile[]> {
