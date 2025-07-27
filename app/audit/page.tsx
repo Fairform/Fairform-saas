@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Upload, Building2, MapPin, Users, FileText, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react'
 import { AuditSession, AuditResults } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
+import Header from '../../components/Header'
 
 interface AuditResult {
   score: number
@@ -14,27 +15,6 @@ interface AuditResult {
   completedChecks: string[]
 }
 
-const NavigationLink = ({ href, children, className, onClick }: { 
-  href: string
-  children: React.ReactNode
-  className?: string
-  onClick?: () => void
-}) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (onClick) {
-      onClick()
-    } else {
-      window.location.href = href
-    }
-  }
-
-  return (
-    <a href={href} onClick={handleClick} className={className}>
-      {children}
-    </a>
-  )
-}
 
 interface BusinessMetadata {
   businessName: string
@@ -214,23 +194,7 @@ export default function SmartAuditPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <NavigationLink href="/" className="flex items-center space-x-2">
-            <span className="text-lg font-medium text-gray-900">Formative</span>
-          </NavigationLink>
-          
-          <div className="flex items-center space-x-4">
-            <NavigationLink href="/login" className="text-sm text-gray-600 hover:text-gray-900">
-              Sign In
-            </NavigationLink>
-            <NavigationLink href="/pricing" className="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800 transition-colors">
-              Get Full Pack
-            </NavigationLink>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Hero Section */}
@@ -627,18 +591,18 @@ export default function SmartAuditPage() {
                 All missing policies included, professionally formatted.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <NavigationLink 
+                <a 
                   href={user ? "/pricing" : "/login?mode=signup"}
                   className="bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                 >
                   Generate Complete Pack - From $99
-                </NavigationLink>
-                <NavigationLink 
+                </a>
+                <a 
                   href="/login?mode=signup"
                   className="border border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-600 transition-colors"
                 >
                   Create Free Account
-                </NavigationLink>
+                </a>
               </div>
             </div>
           </motion.div>
@@ -652,18 +616,18 @@ export default function SmartAuditPage() {
             <span className="text-lg font-medium text-gray-900">Formative</span>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">
-              <NavigationLink href="/privacy" className="hover:text-gray-900 transition-colors">
+              <a href="/privacy" className="hover:text-gray-900 transition-colors">
                 Privacy Policy
-              </NavigationLink>
-              <NavigationLink href="/terms" className="hover:text-gray-900 transition-colors">
+              </a>
+              <a href="/terms" className="hover:text-gray-900 transition-colors">
                 Terms of Service
-              </NavigationLink>
-              <NavigationLink href="/contact" className="hover:text-gray-900 transition-colors">
+              </a>
+              <a href="/contact" className="hover:text-gray-900 transition-colors">
                 Contact
-              </NavigationLink>
-              <NavigationLink href="/help" className="hover:text-gray-900 transition-colors">
+              </a>
+              <a href="/help" className="hover:text-gray-900 transition-colors">
                 Help
-              </NavigationLink>
+              </a>
             </div>
           </div>
           
