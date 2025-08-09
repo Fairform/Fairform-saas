@@ -186,18 +186,41 @@ export default function SmartCompliancePage() {
 
   const runAgent = (agentId: string) => {
     setActiveAgent(agentId)
-    setAgentStatus(prev => ({ ...prev, [agentId]: 'running' }))
-    
-    // Simulate agent running
-    setTimeout(() => {
-      setAgentStatus(prev => ({ ...prev, [agentId]: 'complete' }))
-      setActiveAgent(null)
-    }, 3000)
+const runAgent = async (agentId: string) => {
+  setActiveAgent(agentId);
+  setAgentStatus(prev => ({ ...prev, [agentId]: 'running' }));
+  if (agentId === 'policy-generator') {
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: 'dummy',
+          documentType: 'policy',
+          industry: 'general',
+          businessInfo: {
+            name: 'Acme Corp',
+            address: '123 Example St',
+            industry: 'General',
+          },
+          format: 'docx',
+        }),
+      });
+      const data = await response.json();
+      console.log('Generated document', data);
+    } catch (error) {
+      console.error('Error generating document', error);
+    }
+  } else {
+    await new Promise(resolve => setTimeout(resolve, 3000));
   }
+  setAgentStatus(prev => ({ ...prev, [agentId]: 'complete' }));
+  setActiveAgent(null);
+}; }
 
   const getStatusIcon = (agentId: string) => {
     const status = agentStatus[agentId] || 'idle'
-    switch (status) {
+    switch (status) 
       case 'running':
         return <Clock className="w-4 h-4 text-yellow-500 animate-spin" />
       case 'complete':
