@@ -1,7 +1,7 @@
 // app/api/generate/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceRoleClient } from '@/lib/supabase';
-import { generateDocumentContent } from '@/lib/pocketbook';
+import { generateDocumentContent } from '@/lib/openaiDoc';
 import { generateDocx } from '@/utils/docxBuilder';
 import { generatePdf } from '@/utils/pdfBuilder';
 import { BusinessInfo } from '@/types';
