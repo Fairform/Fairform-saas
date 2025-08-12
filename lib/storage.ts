@@ -29,7 +29,7 @@ export async function storeFile(
     };
   }
   
-  if (process.env.STORAGE_PROVIDER === 'vercel') {
+  if (process.env.STORAGE_PROVIDER === 'vercel' || process.env.VERCEL) {
     try {
       const blobModule = await import('@vercel/blob' as any);
       const { put } = blobModule;
@@ -44,7 +44,7 @@ export async function storeFile(
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       };
     } catch (error) {
-      console.warn('Vercel Blob not available, falling back to base64');
+      console.warn('Vercel Blob not available, falling back to base64:', (error as Error).message);
     }
   }
   

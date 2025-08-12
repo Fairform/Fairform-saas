@@ -1,0 +1,7 @@
+# Include template files in deployment
+!templates/
+!templates/**/*
+# Exclude development files
+.env.local
+node_modules/
+.next/

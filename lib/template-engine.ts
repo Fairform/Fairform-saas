@@ -36,6 +36,7 @@ export class TemplateEngine {
     try {
       html = readFileSync(templatePath, 'utf-8');
     } catch (error) {
+      console.warn(`Template file not found at ${templatePath}, using default template`);
       html = this.getDefaultHtmlTemplate(data.letterhead);
     }
 
@@ -134,10 +135,12 @@ export class TemplateEngine {
         const content = readFileSync(path, 'utf-8');
         return JSON.parse(content);
       } catch (error) {
+        console.warn(`Content block not found at ${path}, trying next path`);
         continue;
       }
     }
 
+    console.warn(`No content blocks found for ${industry}/${documentType}, using defaults`);
     return this.getDefaultContentBlocks(documentType);
   }
 
