@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Policy Statement",
+    "content": "<p>Our organization is committed to providing a safe and healthy work environment for all employees, contractors, visitors, and clients. We comply with the Work Health and Safety Act 2011 and associated regulations.</p><p>Safety is everyone's responsibility and is integral to all business operations.</p>",
+    "order": 1
+  },
+  {
+    "title": "Responsibilities",
+    "content": "<p><strong>Management:</strong></p><ul><li>Provide leadership in health and safety matters</li><li>Ensure adequate resources for safety programs</li><li>Monitor and review safety performance</li></ul><p><strong>Employees:</strong></p><ul><li>Follow safety procedures and instructions</li><li>Report hazards and incidents immediately</li><li>Participate in safety training</li><li>Use personal protective equipment as required</li></ul>",
+    "order": 2
+  },
+  {
+    "title": "Risk Management",
+    "content": "<p>We implement a systematic approach to risk management:</p><ul><li>Identify workplace hazards</li><li>Assess risks associated with hazards</li><li>Implement control measures</li><li>Monitor and review effectiveness</li></ul><p>Risk assessments are conducted regularly and when workplace changes occur.</p>",
+    "order": 3
+  },
+  {
+    "title": "Incident Reporting",
+    "content": "<p>All workplace incidents, injuries, and near misses must be reported immediately to management.</p><p>We maintain an incident register and investigate all incidents to prevent recurrence.</p><p>Workers' compensation claims are managed in accordance with relevant legislation.</p>",
+    "order": 4
+  },
+  {
+    "title": "Training and Consultation",
+    "content": "<p>We provide:</p><ul><li>Induction training for all new workers</li><li>Ongoing safety training and education</li><li>Regular consultation with workers on safety matters</li><li>Access to safety information and resources</li></ul><p>Training records are maintained and reviewed regularly.</p>",
+    "order": 5
+  }
+]

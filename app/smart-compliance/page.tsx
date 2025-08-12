@@ -220,7 +220,7 @@ const runAgent = async (agentId: string) => {
 
   const getStatusIcon = (agentId: string) => {
     const status = agentStatus[agentId] || 'idle'
-    switch (status) 
+    switch (status) {
       case 'running':
         return <Clock className="w-4 h-4 text-yellow-500 animate-spin" />
       case 'complete':

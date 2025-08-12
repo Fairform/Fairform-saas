@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Upload, Building2, MapPin, Users, FileText, CheckCircle, AlertCircle, TrendingUp } from 'lucide-react'
 import { AuditSession, AuditResults } from '@/types'
 import { useAuth } from '@/hooks/useAuth'
-import Header from '../../components/Header'
 
 interface AuditResult {
   score: number
@@ -194,7 +193,6 @@ export default function SmartAuditPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Hero Section */}

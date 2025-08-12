@@ -2,6 +2,8 @@
 import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { AuthProvider } from '@/hooks/useAuth'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const inter = Inter({
@@ -61,7 +63,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-white text-gray-900">
         <AuthProvider>
-          {children}
+          <Navbar />
+          <main id="main">{children}</main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>
