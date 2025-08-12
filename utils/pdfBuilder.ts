@@ -1,5 +1,4 @@
 // utils/pdfBuilder.ts
-import puppeteer from 'puppeteer';
 import { BusinessInfo } from '@/types';
 
 export const generatePdf = async (
@@ -7,11 +6,18 @@ export const generatePdf = async (
   content: string,
   businessInfo: BusinessInfo
 ): Promise<Buffer> => {
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    console.warn('Puppeteer not available in serverless environment, using fallback PDF generation');
+    return generateFallbackPdf(documentType, content, businessInfo);
+  }
+
   let browser;
   
   try {
+    const puppeteer = await import('puppeteer');
+    
     // Launch Puppeteer
-    browser = await puppeteer.launch({
+    browser = await puppeteer.default.launch({
       headless: true,
       args: [
         '--no-sandbox',
@@ -253,13 +259,53 @@ export const generatePdf = async (
     return Buffer.from(pdfBuffer);
 
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    throw new Error('Failed to generate PDF document');
+    console.error('Error generating PDF with Puppeteer:', error);
+    console.warn('Falling back to alternative PDF generation');
+    return generateFallbackPdf(documentType, content, businessInfo);
   } finally {
     if (browser) {
       await browser.close();
     }
   }
+};
+
+const generateFallbackPdf = async (
+  documentType: string,
+  content: string,
+  businessInfo: BusinessInfo
+): Promise<Buffer> => {
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${documentType} - ${businessInfo.businessName}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+    .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 30px; }
+    .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+    .document-title { font-size: 20px; font-weight: bold; }
+    .content { margin-top: 20px; }
+    h1, h2, h3 { color: #333; margin-top: 20px; }
+    p { margin-bottom: 10px; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="company-name">${businessInfo.businessName}</div>
+    <div>ABN: ${businessInfo.abn}</div>
+    <div class="document-title">${documentType}</div>
+  </div>
+  <div class="content">${content}</div>
+  <div class="footer">
+    <p>Generated on ${new Date().toLocaleDateString('en-AU')} | ${businessInfo.businessName}</p>
+  </div>
+</body>
+</html>`;
+
+  const htmlBuffer = Buffer.from(html, 'utf-8');
+  return htmlBuffer;
 };
 
 // Helper function to estimate content length for page breaks

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { randomUUID } from 'crypto';
 import { getServiceRoleClient } from '@/lib/supabase';
 import { generateDocumentContent } from '@/lib/openaiDoc';
 import { TemplateEngine } from '@/lib/template-engine';
@@ -112,7 +113,7 @@ export async function POST(req: NextRequest) {
         
         return {
           type: file.type,
-          url: `/api/download/${crypto.randomUUID()}?type=${file.type}`,
+          url: `/api/download/${randomUUID()}?type=${file.type}`,
           fileName,
           data: file.buffer.toString('base64'),
           mimeType: file.mimeType,
@@ -144,7 +145,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       files: storedFiles,
       meta: {
         title: data.documentType,

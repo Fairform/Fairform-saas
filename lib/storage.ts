@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 interface StoredFile {
   id: string;
   url: string;
@@ -9,7 +11,7 @@ export async function storeFile(
   mimeType: string, 
   extension: string
 ): Promise<StoredFile> {
-  const id = crypto.randomUUID();
+  const id = randomUUID();
   const fileName = `${id}.${extension}`;
   
   if (process.env.NODE_ENV === 'development') {
