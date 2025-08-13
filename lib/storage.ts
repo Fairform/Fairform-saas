@@ -31,24 +31,6 @@ export async function storeFile(
     };
   }
   
-  if (process.env.STORAGE_PROVIDER === 'vercel' || process.env.VERCEL) {
-    try {
-      const blobModule = await import('@vercel/blob' as any);
-      const { put } = blobModule;
-      const blob = await put(fileName, buffer, {
-        access: 'public',
-        contentType: mimeType,
-      });
-      
-      return {
-        id,
-        url: blob.url,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      };
-    } catch (error) {
-      console.warn('Vercel Blob not available, falling back to base64:', (error as Error).message);
-    }
-  }
   
   return {
     id,
@@ -57,15 +39,17 @@ export async function storeFile(
   };
 }
 
-export async function getFile(id: string): Promise<Buffer | null> {
+export async function getFile(id: string, extension?: string): Promise<Buffer | null> {
   if (process.env.NODE_ENV === 'development') {
     const fs = await import('fs/promises');
     const path = await import('path');
     
     try {
-      const filePath = path.join('/tmp', 'formative', `${id}`);
+      const fileName = extension ? `${id}.${extension}` : `${id}.pdf`;
+      const filePath = path.join('/tmp', 'formative', fileName);
       return await fs.readFile(filePath);
     } catch (error) {
+      console.error('Error reading file:', error);
       return null;
     }
   }

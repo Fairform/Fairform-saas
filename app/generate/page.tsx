@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +20,8 @@ interface GeneratedDocument {
 }
 
 export default function GeneratePage() {
+  const { user } = useAuth()
+  const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null)
   const [formData, setFormData] = useState({
     businessName: '',
     abn: '',
@@ -36,6 +39,25 @@ export default function GeneratePage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedDocuments, setGeneratedDocuments] = useState<GeneratedDocument[]>([])
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!user) {
+      window.location.href = '/(auth)/login?next=/generate'
+      return
+    }
+
+    const checkSubscription = async () => {
+      try {
+        const response = await fetch(`/api/user/subscription-status?userId=${user.id}`)
+        const data = await response.json()
+        setSubscriptionStatus(data)
+      } catch (error) {
+        console.error('Failed to check subscription:', error)
+      }
+    }
+
+    checkSubscription()
+  }, [user])
 
   const handleDocumentSelection = (selection: {
     industryId: string
@@ -55,6 +77,13 @@ export default function GeneratePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!subscriptionStatus?.canGenerate) {
+      alert('Please subscribe to a plan to generate documents.')
+      window.location.href = '/pricing'
+      return
+    }
+    
     setIsGenerating(true)
     setError('')
 
@@ -96,6 +125,30 @@ export default function GeneratePage() {
 
   const downloadFile = (file: GeneratedDocument) => {
     window.open(file.downloadUrl, '_blank')
+  }
+
+  if (!user || !subscriptionStatus) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  }
+
+  if (!subscriptionStatus.canGenerate) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-2xl mx-auto px-4 text-center">
+          <h1 className="text-3xl font-bold mb-4">Subscription Required</h1>
+          <p className="text-gray-600 mb-8">
+            {subscriptionStatus.limit === 0 
+              ? 'Please subscribe to a plan to generate documents.'
+              : `You've reached your monthly limit of ${subscriptionStatus.limit} documents.`}
+          </p>
+          <Button onClick={() => window.location.href = '/pricing'}>
+            View Plans
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (

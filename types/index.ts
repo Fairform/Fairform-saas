@@ -3,6 +3,7 @@
 export interface BusinessInfo {
   businessName: string;
   abn: string;
+  contactEmail?: string;
   industry?: string;
   address?: string;
   phone?: string;

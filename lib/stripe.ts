@@ -202,6 +202,10 @@ export function getSubscriptionProducts(): StripeProduct[] {
   return Object.values(STRIPE_PRODUCTS).filter(product => product.type === 'recurring');
 }
 
+export function getSubscriptionProductsForPricing(): StripeProduct[] {
+  return Object.values(STRIPE_PRODUCTS).filter(product => product.type === 'recurring');
+}
+
 export function getProductsByCategory(category: string): StripeProduct[] {
   return Object.values(STRIPE_PRODUCTS).filter(product => product.category === category);
 }
@@ -220,6 +224,11 @@ export function formatPrice(product: StripeProduct): string {
     return `${price}/${product.interval}`;
   }
   return price;
+}
+
+export function formatPriceForPricing(product: StripeProduct): string {
+  if (product.price === 0) return 'Free'
+  return `$${product.price}/month`
 }
 
 // Validate if a price ID exists in our products

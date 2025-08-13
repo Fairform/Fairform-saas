@@ -40,21 +40,49 @@ export class CatalogTemplateEngine {
     const files: any[] = []
 
     if (format === 'pdf') {
-      const html = this.buildHtmlFromBlocks(blocks, data)
+      const { generatePdf } = await import('@/utils/pdfBuilder')
+      const pdfBuffer = await generatePdf(
+        data.documentType,
+        processedContent,
+        {
+          businessName: data.businessName,
+          abn: data.abn || '',
+          contactEmail: data.contactEmail
+        }
+      )
+      
+      const { storeFile } = await import('@/lib/storage')
+      const storedFile = await storeFile(pdfBuffer, 'application/pdf', 'pdf')
+      
       files.push({
         type: 'pdf',
-        content: html,
         filename: `${data.businessName}_${documentId}.pdf`,
-        mimeType: 'text/html'
+        downloadUrl: storedFile.url,
+        fileId: storedFile.id,
+        mimeType: 'application/pdf'
       })
     }
 
     if (format === 'docx') {
-      const docxContent = this.buildDocxFromBlocks(blocks, data)
+      const { generateDocx } = await import('@/utils/docxBuilder')
+      const docxBuffer = await generateDocx(
+        data.documentType,
+        processedContent,
+        {
+          businessName: data.businessName,
+          abn: data.abn || '',
+          contactEmail: data.contactEmail
+        }
+      )
+      
+      const { storeFile } = await import('@/lib/storage')
+      const storedFile = await storeFile(docxBuffer, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx')
+      
       files.push({
         type: 'docx',
-        content: docxContent,
         filename: `${data.businessName}_${documentId}.docx`,
+        downloadUrl: storedFile.url,
+        fileId: storedFile.id,
         mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       })
     }
