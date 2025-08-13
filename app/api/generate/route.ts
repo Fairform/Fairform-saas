@@ -4,6 +4,7 @@ import { CatalogTemplateEngine } from '@/lib/catalog-engine'
 import { createClient } from '@/lib/supabase-server'
 import { validateIndustryPack, getDocumentsForPack } from '@/lib/catalog'
 import { rateLimit } from '@/lib/rate-limit'
+import { checkDocumentGenerationLimit, trackDocumentGeneration } from '@/lib/access-control'
 
 const generateSchema = z.object({
   businessName: z.string().min(1, 'Business name is required').max(100),
@@ -27,6 +28,29 @@ export async function POST(request: NextRequest) {
         { error: 'Rate limit exceeded. Please try again later.' },
         { status: 429 }
       )
+    }
+
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required. Please log in to generate documents.' },
+        { status: 401 }
+      )
+    }
+
+    const limitCheck = await checkDocumentGenerationLimit(user.id)
+    if (!limitCheck.canGenerate) {
+      return NextResponse.json({
+        error: 'Subscription required or limit exceeded',
+        details: limitCheck.limit === 0 
+          ? 'Please subscribe to a plan to generate documents.'
+          : `Monthly limit of ${limitCheck.limit} documents reached. Used: ${limitCheck.used}/${limitCheck.limit}`,
+        limit: limitCheck.limit,
+        used: limitCheck.used,
+        remaining: limitCheck.remaining
+      }, { status: 402 })
     }
 
     const body = await request.json()
@@ -84,14 +108,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
     if (user) {
       for (const documentId of validatedData.documents) {
         const document = allowedDocuments.find(doc => doc.id === documentId)
         if (document) {
-          await supabase.from('generated_documents').insert({
+          const { data: docRecord } = await supabase.from('generated_documents').insert({
             user_id: user.id,
             title: `${document.title} - ${validatedData.businessName}`,
             document_type: documentId,
@@ -102,7 +123,11 @@ export async function POST(request: NextRequest) {
               pack: validatedData.pack,
               additionalInfo: validatedData.additionalInfo
             }
-          })
+          }).select().single()
+
+          if (docRecord) {
+            await trackDocumentGeneration(user.id, docRecord.id)
+          }
         }
       }
     }
