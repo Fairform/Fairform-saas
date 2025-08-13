@@ -1,114 +1,106 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Download, Loader2, Check } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
+import { Download, FileText, Loader2 } from 'lucide-react'
+import DocumentSelector from '@/components/DocumentSelector'
+import { type CatalogDoc, type PackDefinition } from '@/lib/catalog'
 
-interface GeneratedFile {
-  type: string;
-  url: string;
-  fileName: string;
-  data: string;
-  mimeType: string;
+interface GeneratedDocument {
+  id: string
+  title: string
+  format: string
+  downloadUrl: string
+  createdAt: string
 }
 
 export default function GeneratePage() {
-  const { user } = useAuth();
   const [formData, setFormData] = useState({
     businessName: '',
+    abn: '',
+    address: '',
+    contactEmail: '',
+    contactPhone: '',
+    website: '',
     industry: '',
-    documentType: '',
-    letterhead: false,
-    format: ['pdf'] as string[],
-    branding: {
-      primaryColor: '#2563eb',
-      accentColor: '#1e40af',
-      footerNote: '',
-      headerText: '',
-    },
-    placeholders: {
-      address: '',
-      abn: '',
-      contactEmail: '',
-      phone: '',
-    },
-  });
+    pack: '',
+    format: 'pdf',
+    additionalInfo: ''
+  })
+  const [selectedDocuments, setSelectedDocuments] = useState<CatalogDoc[]>([])
+  const [selectedPack, setSelectedPack] = useState<PackDefinition | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generatedDocuments, setGeneratedDocuments] = useState<GeneratedDocument[]>([])
+  const [error, setError] = useState('')
 
-  const [loading, setLoading] = useState(false);
-  const [generatedFiles, setGeneratedFiles] = useState<GeneratedFile[]>([]);
+  const handleDocumentSelection = (selection: {
+    industryId: string
+    packId: string
+    documents: CatalogDoc[]
+    pack: PackDefinition
+  }) => {
+    setFormData(prev => ({
+      ...prev,
+      industry: selection.industryId,
+      pack: selection.packId,
+      format: selection.pack.formats[0]
+    }))
+    setSelectedDocuments(selection.documents)
+    setSelectedPack(selection.pack)
+  }
 
-  const industries = [
-    { value: 'ndis', label: 'NDIS Services' },
-    { value: 'construction', label: 'Construction' },
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'childcare', label: 'Childcare & Education' },
-    { value: 'professional-services', label: 'Professional Services' },
-  ];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsGenerating(true)
+    setError('')
 
-  const documentTypes = [
-    'Privacy Policy',
-    'Work Health & Safety Policy',
-    'Code of Conduct',
-    'Incident Management Procedure',
-    'Quality Assurance Policy',
-    'Risk Management Framework',
-  ];
-
-  const handleGenerate = async () => {
-    if (!formData.businessName || !formData.industry || !formData.documentType) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    if (formData.format.length === 0) {
-      alert('Please select at least one format (PDF or DOCX)');
-      return;
-    }
-
-    console.log('Frontend sending data:', JSON.stringify(formData, null, 2));
-
-    setLoading(true);
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           ...formData,
-          userId: user?.id,
+          documents: selectedDocuments.map(doc => doc.id)
         }),
-      });
+      })
 
-      const data = await response.json();
-      
       if (!response.ok) {
-        throw new Error(data.details || data.error);
+        throw new Error('Failed to generate document')
       }
 
-      setGeneratedFiles(data.files);
-    } catch (error: any) {
-      console.error('Generation failed:', error);
-      alert('Generation failed: ' + error.message);
+      const result = await response.json()
+      
+      if (result.success && result.files) {
+        const newDocuments: GeneratedDocument[] = result.files.map((file: any) => ({
+          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+          title: file.filename,
+          format: file.format,
+          downloadUrl: file.downloadUrl,
+          createdAt: new Date().toISOString()
+        }))
+        
+        setGeneratedDocuments(prev => [...prev, ...newDocuments])
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
-      setLoading(false);
+      setIsGenerating(false)
     }
-  };
+  }
 
-  const downloadFile = (file: GeneratedFile) => {
-    const blob = new Blob([Buffer.from(file.data, 'base64')], { type: file.mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = file.fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
+  const downloadFile = (file: GeneratedDocument) => {
+    window.open(file.downloadUrl, '_blank')
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Generate Compliance Documents
@@ -118,158 +110,176 @@ export default function GeneratePage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-lg p-8 border border-gray-200">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Document Details</h2>
-            
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Business Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.businessName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Your business name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Industry *
-                </label>
-                <select
-                  required
-                  value={formData.industry}
-                  onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select industry</option>
-                  {industries.map(industry => (
-                    <option key={industry.value} value={industry.value}>
-                      {industry.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Document Type *
-                </label>
-                <select
-                  required
-                  value={formData.documentType}
-                  onChange={(e) => setFormData(prev => ({ ...prev, documentType: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select document type</option>
-                  {documentTypes.map(type => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.letterhead}
-                    onChange={(e) => setFormData(prev => ({ ...prev, letterhead: e.target.checked }))}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <span className="text-sm font-medium text-gray-700">Include letterhead</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Format
-                </label>
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Document Generation</CardTitle>
+            <CardDescription>
+              Fill in your business details and select the documents you need
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  {['pdf', 'docx'].map(format => (
-                    <label key={format} className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={formData.format.includes(format)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFormData(prev => ({ ...prev, format: [...prev.format, format] }));
-                          } else {
-                            setFormData(prev => ({ ...prev, format: prev.format.filter(f => f !== format) }));
-                          }
-                        }}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700">{format.toUpperCase()}</span>
-                    </label>
-                  ))}
+                  <Label htmlFor="businessName">Business Name *</Label>
+                  <Input
+                    id="businessName"
+                    value={formData.businessName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
+                    placeholder="Your business name"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contactEmail">Contact Email *</Label>
+                  <Input
+                    id="contactEmail"
+                    type="email"
+                    value={formData.contactEmail}
+                    onChange={(e) => setFormData(prev => ({ ...prev, contactEmail: e.target.value }))}
+                    placeholder="contact@yourbusiness.com"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="abn">ABN</Label>
+                  <Input
+                    id="abn"
+                    value={formData.abn}
+                    onChange={(e) => setFormData(prev => ({ ...prev, abn: e.target.value }))}
+                    placeholder="12 345 678 901"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contactPhone">Contact Phone</Label>
+                  <Input
+                    id="contactPhone"
+                    value={formData.contactPhone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, contactPhone: e.target.value }))}
+                    placeholder="+61 2 1234 5678"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address">Business Address</Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                    placeholder="123 Business St, City, State"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    value={formData.website}
+                    onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
+                    placeholder="https://yourbusiness.com"
+                  />
                 </div>
               </div>
 
-              <button
-                onClick={handleGenerate}
-                disabled={loading || !formData.businessName || !formData.industry || !formData.documentType || formData.format.length === 0}
-                className="w-full bg-black text-white py-4 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              <DocumentSelector
+                onSelectionChange={handleDocumentSelection}
+                initialIndustry={formData.industry}
+                initialPack={formData.pack}
+              />
+
+              {selectedPack && (
+                <div className="space-y-2">
+                  <Label htmlFor="format">Output Format</Label>
+                  <select
+                    value={formData.format}
+                    onChange={(e) => setFormData(prev => ({ ...prev, format: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {selectedPack.formats.map((format) => (
+                      <option key={format} value={format}>
+                        {format.toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="additionalInfo">Additional Information</Label>
+                <Textarea
+                  id="additionalInfo"
+                  value={formData.additionalInfo}
+                  onChange={(e) => setFormData(prev => ({ ...prev, additionalInfo: e.target.value }))}
+                  placeholder="Any specific requirements or additional information..."
+                  rows={3}
+                />
+              </div>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                  {error}
+                </div>
+              )}
+
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={isGenerating || !formData.businessName || !formData.industry || !formData.pack || selectedDocuments.length === 0}
               >
-                {loading ? (
+                {isGenerating ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Generating...</span>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating Documents...
                   </>
                 ) : (
                   <>
-                    <FileText className="w-4 h-4" />
-                    <span>Generate Documents</span>
+                    <FileText className="mr-2 h-4 w-4" />
+                    Generate {selectedDocuments.length} Document{selectedDocuments.length !== 1 ? 's' : ''}
+                    {selectedPack && ` - $${selectedPack.price}`}
                   </>
                 )}
-              </button>
-            </div>
-          </div>
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
-          <div className="bg-white rounded-lg p-8 border border-gray-200">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Generated Documents</h2>
-            
-            {generatedFiles.length === 0 ? (
-              <div className="text-center py-12">
-                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Your generated documents will appear here</p>
-              </div>
-            ) : (
+        {generatedDocuments.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Generated Documents</CardTitle>
+              <CardDescription>
+                Your documents are ready for download
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-4">
-                {generatedFiles.map((file, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
-                  >
+                {generatedDocuments.map((doc) => (
+                  <div key={doc.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <FileText className="w-5 h-5 text-green-600" />
+                      <FileText className="h-5 w-5 text-blue-600" />
                       <div>
-                        <p className="font-medium text-gray-900">{file.fileName}</p>
-                        <p className="text-sm text-gray-600">{file.type.toUpperCase()}</p>
+                        <p className="font-medium text-gray-900">{doc.title}</p>
+                        <p className="text-sm text-gray-500">{doc.format?.toUpperCase() || 'PDF'}</p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => downloadFile(file)}
-                      className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                    <Button
+                      onClick={() => downloadFile(doc)}
+                      variant="outline"
+                      size="sm"
                     >
-                      <Download className="w-4 h-4" />
-                      <span>Download</span>
-                    </button>
-                  </motion.div>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
+                  </div>
                 ))}
               </div>
-            )}
-          </div>
-        </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
-  );
+  )
 }

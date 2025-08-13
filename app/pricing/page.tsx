@@ -1,537 +1,87 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useAuth } from '@/hooks/useAuth'
-import { 
-  Check, 
-  ArrowRight, 
-  X,
-  Star,
-  Shield,
-  Zap,
-  Users,
-  Download,
-  Brain,
-  FileText,
-  Clock,
-  MessageCircle
-} from 'lucide-react'
-import Logo from '../../components/Logo'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Check } from 'lucide-react'
+import { INDUSTRY_PACKS, getCatalogStats } from '@/lib/catalog'
 
-// Checkout hook
-const useCheckout = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { user, session } = useAuth()
+const catalogStats = getCatalogStats()
 
-  const initiateCheckout = async (priceId: string, planName: string) => {
-    setLoading(true)
-    setError(null)
-
-    if (!user || !session) {
-      window.location.href = '/login'
-      setLoading(false)
-      return
-    }
-
-    try {
-      const response = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        },
-        body: JSON.stringify({
-          priceId,
-          userId: user.id,
-          customerEmail: user.email,
-          metadata: {
-            planName,
-            source: 'pricing_page'
-          }
-        })
-      })
-
-      const data = await response.json()
-      
-      if (!response.ok) {
-        if (data.error === 'Invalid pricing configuration') {
-          setError('This plan is not yet available. Please contact support.')
-        } else if (data.error === 'Stripe not configured') {
-          setError('Payment system is currently unavailable. Please try again later.')
-        } else {
-          setError(data.details || data.error || 'Failed to create checkout session')
-        }
-        setLoading(false)
-        return
-      }
-      
-      if (data.url) {
-        window.location.href = data.url
-      }
-    } catch (error: any) {
-      setError(error.message)
-      console.error('Checkout failed:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { initiateCheckout, loading, error }
-}
-
-// Navigation helper component
-const NavigationLink = ({ href, children, className, onClick }: { 
-  href: string
-  children: React.ReactNode
-  className?: string
-  onClick?: () => void
-}) => {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    
-    if (onClick) {
-      onClick()
-    } else {
-      // For demonstration purposes, we'll use window.location.href
-      // In a real app, you'd replace this with your routing solution:
-      // - Next.js: Use next/link or router.push()
-      // - React Router: Use Link component or navigate()
-      // - Other: Your preferred routing method
-      
-      console.log(`Navigating to: ${href}`)
-      window.location.href = href
-    }
-  }
-
-  return (
-    <a 
-      href={href} 
-      className={className}
-      onClick={handleClick}
-    >
-      {children}
-    </a>
-  )
-}
-
-// Price IDs - Replace with your actual Stripe price IDs
-const PRICE_IDS = {
-  // One-time purchases
-  LITE_PACK: 'price_lite_pack',
-  PRO_PACK: 'price_pro_pack',
-  NDIS_PACK: 'price_ndis_pack',
-  CONSTRUCTION_PACK: 'price_construction_pack',
-  
-  // Monthly subscriptions
-  STARTER_MONTHLY: 'price_starter_monthly',
-  PRO_MONTHLY: 'price_pro_monthly',
-  AGENCY_MONTHLY: 'price_agency_monthly',
-}
 
 export default function PricingPage() {
-  const [pricingMode, setPricingMode] = useState('monthly') // 'monthly' or 'oneTime'
-  const [billingCycle, setBillingCycle] = useState('monthly') // 'monthly' or 'yearly'
-  const { initiateCheckout, loading, error } = useCheckout()
-  const { user } = useAuth()
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="container mx-auto px-4 py-16">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          Industry-Specific Document Packs
+        </h1>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Choose from {catalogStats.industries} industry-specific document packs with over {catalogStats.totalDocuments} compliance templates.
+        </p>
+      </div>
 
-      {/* Main content */}
-      <main>
-        {/* Hero Section */}
-        <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-8"
-          >
-            <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-4 py-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm font-medium text-green-700">Get compliant in 60 seconds</span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Stop paying thousands for compliance consultants
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Get the exact same professional documents that cost $5,000+ from consultants. Download instantly, customize with your branding, and be compliant today.
-            </p>
-            
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
-              <div className="text-sm text-yellow-800">
-                <strong>Limited Time:</strong> Save up to 95% vs hiring consultants
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-16">
+        {Object.entries(INDUSTRY_PACKS).map(([industryId, industry]) => (
+          <Card key={industryId} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">{industry.label}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {industry.packs.map((pack) => (
+                  <div key={pack.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="font-medium">{pack.label}</h4>
+                      <span className="text-lg font-bold text-blue-600">${pack.price}</span>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-2">
+                      Formats: {pack.formats.join(', ').toUpperCase()}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {pack.includes === 'subset' && 'Essential documents only'}
+                      {pack.includes === 'all' && 'All industry documents'}
+                      {pack.includes === 'all-plus-extras' && 'All documents + extras'}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </motion.div>
-        </section>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-        {/* Error Display */}
-        {error && (
-          <div className="max-w-md mx-auto mb-8 px-6">
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
-            </div>
+      <div className="text-center mt-16">
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          Why Choose Our Document Packs?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">{catalogStats.industries}</div>
+            <div className="text-gray-600">Industries covered</div>
           </div>
-        )}
-
-        {/* Pricing Toggle */}
-        <section className="max-w-6xl mx-auto px-6 pb-12" id="pricing">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Choose your path to instant compliance
-            </h2>
-            <p className="text-gray-600">One-time purchase or ongoing compliance support - both save you thousands</p>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">{catalogStats.totalDocuments}</div>
+            <div className="text-gray-600">Document templates</div>
           </div>
-          
-          <div className="flex items-center justify-center mb-12">
-            <div className="bg-gray-200 p-1 rounded-lg">
-              <button
-                onClick={() => setPricingMode('oneTime')}
-                className={`px-6 py-3 rounded-md text-sm font-medium transition-colors ${
-                  pricingMode === 'oneTime' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                One-Time Purchase
-                <span className="block text-xs text-green-600 mt-1">Save 90% vs consultants</span>
-              </button>
-              <button
-                onClick={() => setPricingMode('monthly')}
-                className={`px-6 py-3 rounded-md text-sm font-medium transition-colors ${
-                  pricingMode === 'monthly' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Monthly Plans
-                <span className="block text-xs text-blue-600 mt-1">Always up-to-date</span>
-              </button>
-            </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">100%</div>
+            <div className="text-gray-600">Australian compliance</div>
           </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+            <div className="text-gray-600">Expert support</div>
+          </div>
+        </div>
+      </div>
 
-          {/* One-time Purchase Plans */}
-          {pricingMode === 'oneTime' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {[
-                {
-                  name: "Lite Pack",
-                  price: "$79",
-                  currency: "AUD",
-                  description: "Perfect for quick compliance needs",
-                  priceId: PRICE_IDS.LITE_PACK,
-                  features: [
-                    "PDF format only",
-                    "Watermarked documents", 
-                    "Non-editable",
-                    "Basic compliance coverage",
-                    "Email support"
-                  ],
-                  notIncluded: [
-                    "Word format",
-                    "Custom branding",
-                    "Priority support"
-                  ]
-                },
-                {
-                  name: "Pro Pack",
-                  price: "$189",
-                  currency: "AUD", 
-                  description: "Complete professional solution",
-                  priceId: PRICE_IDS.PRO_PACK,
-                  features: [
-                    "Word & PDF formats",
-                    "Fully editable documents",
-                    "Custom branding support",
-                    "Audit-ready documents",
-                    "Priority email support",
-                    "Legal compliance guaranteed"
-                  ],
-                  notIncluded: [],
-                  popular: true
-                },
-                {
-                  name: "NDIS Full Pack",
-                  price: "$499",
-                  currency: "AUD",
-                  description: "Complete NDIS compliance suite",
-                  priceId: PRICE_IDS.NDIS_PACK,
-                  features: [
-                    "30+ NDIS-specific documents",
-                    "Verification audit ready",
-                    "Certification audit ready",
-                    "NDIS Commission compliant",
-                    "Word & PDF formats",
-                    "Dedicated NDIS support"
-                  ],
-                  notIncluded: []
-                },
-                {
-                  name: "Construction Pack",
-                  price: "$349", 
-                  currency: "AUD",
-                  description: "Construction & trade essentials",
-                  priceId: PRICE_IDS.CONSTRUCTION_PACK,
-                  features: [
-                    "SWMS templates",
-                    "JSA documents", 
-                    "Risk assessment matrices",
-                    "Contract templates",
-                    "Safety procedure docs",
-                    "Industry-specific compliance"
-                  ],
-                  notIncluded: []
-                }
-              ].map((plan, index) => (
-                <div 
-                  key={index}
-                  className={`bg-white rounded-2xl p-6 relative border-2 transition-all hover:shadow-xl ${
-                    plan.popular 
-                      ? 'border-black shadow-lg transform scale-105' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-black text-white px-4 py-1 rounded-full text-sm font-medium">
-                        Most popular
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    
-                    <div className="mb-2">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-600 ml-1">{plan.currency}</span>
-                    </div>
-                    <p className="text-sm text-gray-600">{plan.description}</p>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">What you get:</h4>
-                      <ul className="space-y-2">
-                        {plan.features.map((feature, i) => (
-                          <li key={i} className="flex items-center space-x-3 text-sm">
-                            <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                            <span className="text-gray-700">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    {plan.notIncluded.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-3">Not included:</h4>
-                        <ul className="space-y-2">
-                          {plan.notIncluded.map((feature, i) => (
-                            <li key={i} className="flex items-center space-x-3 text-sm">
-                              <X className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                              <span className="text-gray-500">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  <button 
-                    onClick={() => initiateCheckout(plan.priceId, plan.name)}
-                    disabled={loading}
-                    className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all disabled:opacity-50 transform hover:scale-105 ${
-                      plan.popular 
-                        ? 'bg-black hover:bg-gray-800 text-white shadow-lg'
-                        : 'bg-gray-900 hover:bg-black text-white'
-                    }`}
-                  >
-                    {loading ? 'Processing...' : `Get ${plan.name} Now`}
-                  </button>
-                  
-                  <div className="text-center mt-3">
-                    <div className="text-[10px] text-gray-500">Instant download</div>
-                    <div className="text-[10px] text-gray-500">Lifetime access</div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          )}
-
-          {/* Monthly Subscription Plans */}
-          {pricingMode === 'monthly' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {[
-                {
-                  name: "Starter",
-                  price: "$129",
-                  currency: "AUD/month",
-                  description: "Perfect for small businesses",
-                  priceId: PRICE_IDS.STARTER_MONTHLY,
-                  features: [
-                    "3 documents per month",
-                    "Core industry templates",
-                    "PDF downloads",
-                    "Email support",
-                    "Basic compliance coverage"
-                  ],
-                  notIncluded: [
-                    "Word format",
-                    "Unlimited documents",
-                    "Priority support",
-                    "Custom branding"
-                  ]
-                },
-                {
-                  name: "Pro",
-                  price: "$179",
-                  currency: "AUD/month",
-                  description: "Everything you need to scale",
-                  priceId: PRICE_IDS.PRO_MONTHLY,
-                  features: [
-                    "Unlimited documents",
-                    "All industry templates",
-                    "Word & PDF formats",
-                    "Custom branding support",
-                    "Priority support",
-                    "Advanced compliance features"
-                  ],
-                  notIncluded: [],
-                  popular: true
-                },
-                {
-                  name: "Agency", 
-                  price: "$499",
-                  currency: "AUD/month",
-                  description: "For agencies & consultants",
-                  priceId: PRICE_IDS.AGENCY_MONTHLY,
-                  features: [
-                    "Everything in Pro",
-                    "Team collaboration",
-                    "White-label branding",
-                    "Unlimited client documents",
-                    "Multi-client management",
-                    "Dedicated account manager"
-                  ],
-                  notIncluded: []
-                },
-                {
-                  name: "Enterprise",
-                  price: "Custom",
-                  currency: "pricing",
-                  description: "Large organizations",
-                  priceId: null,
-                  features: [
-                    "Everything in Agency",
-                    "API access",
-                    "Custom integrations",
-                    "Bulk document generation",
-                    "SLA agreements",
-                    "On-site training",
-                    "Custom workflows"
-                  ],
-                  notIncluded: []
-                }
-              ].map((plan, index) => (
-                <div 
-                  key={index}
-                  className={`bg-white rounded-2xl p-6 relative border-2 transition-all hover:shadow-xl ${
-                    plan.popular 
-                      ? 'border-black shadow-lg transform scale-105' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-black text-white px-4 py-1 rounded-full text-sm font-medium">
-                        Most popular
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    <div className="mb-2">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-600 ml-1 text-sm">{plan.currency}</span>
-                    </div>
-                    <p className="text-sm text-gray-600">{plan.description}</p>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">What you get:</h4>
-                      <ul className="space-y-2">
-                        {plan.features.map((feature, i) => (
-                          <li key={i} className="flex items-center space-x-3 text-sm">
-                            <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                            <span className="text-gray-700">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    {plan.notIncluded.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-3">Upgrade to get:</h4>
-                        <ul className="space-y-2">
-                          {plan.notIncluded.map((feature, i) => (
-                            <li key={i} className="flex items-center space-x-3 text-sm">
-                              <X className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                              <span className="text-gray-500">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  <button 
-                    onClick={() => {
-                      if (plan.name === 'Enterprise') {
-                        window.location.href = '/contact'
-                      } else if (plan.priceId) {
-                        initiateCheckout(plan.priceId, plan.name)
-                      }
-                    }}
-                    disabled={loading}
-                    className={`w-full py-4 px-6 rounded-lg font-bold text-lg transition-all disabled:opacity-50 transform hover:scale-105 ${
-                      plan.popular 
-                        ? 'bg-black hover:bg-gray-800 text-white shadow-lg'
-                        : 'bg-gray-900 hover:bg-black text-white'
-                    }`}
-                  >
-                    {loading ? 'Processing...' : (plan.name === 'Enterprise' ? 'Talk to Sales' : `Start ${plan.name} Plan`)}
-                  </button>
-                  
-                  <div className="text-center mt-3">
-                    <div className="text-[10px] text-gray-500">Cancel anytime</div>
-                    <div className="text-[10px] text-gray-500">No contracts or commitments</div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          )}
-        </section>
-
-        {/* Features Comparison */}
-        <section className="py-20 px-6 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
+      <div className="text-center mt-16">
+        <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+          Start Generating Documents
+        </Button>
+      </div>
+    </div>
+  )
+}
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Everything you need for compliance
               </h2>
