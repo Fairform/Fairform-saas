@@ -1,21 +1,42 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Check } from 'lucide-react'
-import { getSubscriptionProductsForPricing, formatPriceForPricing } from '@/lib/stripe'
-import { useAuth } from '@/hooks/useAuth'
-import { buildAuthAwareHref } from '@/lib/auth-redirect'
-
-const subscriptionPlans = getSubscriptionProductsForPricing()
+import { formatPriceForPricing, type StripeProduct } from '@/lib/stripe'
 
 export default function PricingPage() {
-  const { user } = useAuth()
+  const [subscriptionPlans, setSubscriptionPlans] = useState<StripeProduct[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/pricing')
+      .then(res => res.json())
+      .then(data => {
+        setSubscriptionPlans(data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error('Error fetching pricing:', error)
+        setLoading(false)
+      })
+  }, [])
 
   const handlePlanSelect = (priceId: string) => {
     const nextPath = `/checkout/subscription/${priceId}`
-    const href = buildAuthAwareHref({ authed: !!user, nextPath })
-    window.location.href = href
+    window.location.href = `/(auth)/login?next=${encodeURIComponent(nextPath)}`
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading pricing plans...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
