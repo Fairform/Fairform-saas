@@ -25,7 +25,7 @@ export default function PricingPage() {
 
   const handlePlanSelect = (priceId: string) => {
     const nextPath = `/checkout/subscription/${priceId}`
-    window.location.href = `/(auth)/login?next=${encodeURIComponent(nextPath)}`
+    window.location.href = `/login?next=${encodeURIComponent(nextPath)}`
   }
 
   if (loading) {

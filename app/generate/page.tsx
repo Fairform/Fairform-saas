@@ -42,7 +42,7 @@ export default function GeneratePage() {
 
   useEffect(() => {
     if (!user) {
-      window.location.href = '/(auth)/login?next=/generate'
+      window.location.href = '/login?next=/generate'
       return
     }
 

@@ -75,7 +75,7 @@ function ResetPasswordPageContent() {
       } else {
         setSuccess('Password updated successfully! Redirecting to login...')
         setTimeout(() => {
-          router.push('/(auth)/login?reset=1')
+          router.push('/login?reset=1')
         }, 2000)
       }
     } catch (err: any) {

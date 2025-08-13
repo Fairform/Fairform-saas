@@ -141,7 +141,7 @@ function LoginPageContent() {
 
   const handleForgotPassword = () => {
     const next = searchParams?.get('next')
-    const forgotUrl = next ? `/(auth)/forgot-password?next=${encodeURIComponent(next)}` : '/(auth)/forgot-password'
+    const forgotUrl = next ? `/forgot-password?next=${encodeURIComponent(next)}` : '/forgot-password'
     router.push(forgotUrl)
   }
 

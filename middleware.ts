@@ -29,14 +29,17 @@ export async function middleware(req: NextRequest) {
   const isProtectedRoute = req.nextUrl.pathname.startsWith('/dashboard') || 
                           req.nextUrl.pathname.startsWith('/generate') ||
                           req.nextUrl.pathname.startsWith('/checkout')
-  const isAuthRoute = req.nextUrl.pathname.startsWith('/(auth)/')
+  const isAuthRoute = req.nextUrl.pathname.startsWith('/login') || 
+                     req.nextUrl.pathname.startsWith('/signup') || 
+                     req.nextUrl.pathname.startsWith('/forgot-password') || 
+                     req.nextUrl.pathname.startsWith('/reset-password')
 
   if (isProtectedRoute && !isAuthRoute) {
     const token = req.cookies.get('sb-access-token')
     const refreshToken = req.cookies.get('sb-refresh-token')
     
     if (!token && !refreshToken) {
-      const loginUrl = new URL('/(auth)/login', req.url)
+      const loginUrl = new URL('/login', req.url)
       loginUrl.searchParams.set('next', req.nextUrl.pathname)
       return NextResponse.redirect(loginUrl)
     }
@@ -46,5 +49,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/(auth)/:path*', '/generate', '/checkout/:path*']
+  matcher: ['/dashboard/:path*', '/login', '/signup', '/forgot-password', '/reset-password', '/generate', '/checkout/:path*']
 }

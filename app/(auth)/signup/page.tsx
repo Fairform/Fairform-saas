@@ -7,7 +7,7 @@ export default function SignupPage() {
   const router = useRouter()
 
   useEffect(() => {
-    router.push('/(auth)/login?mode=signup')
+    router.push('/login?mode=signup')
   }, [router])
 
   return (

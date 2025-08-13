@@ -94,7 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
         options: {
           data: metadata,
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/(auth)/reset-password`
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
         }
       })
       
@@ -109,7 +109,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const resetPassword = async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/(auth)/reset-password`
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
       })
       if (error) throw error
     } catch (error) {

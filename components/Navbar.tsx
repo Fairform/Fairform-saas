@@ -8,7 +8,7 @@ import { LogOut, Menu, X } from 'lucide-react';
 function GenerateCTA() {
   const { user } = useAuth()
   
-  const href = user ? '/generate' : '/(auth)/login?next=/generate'
+  const href = user ? '/generate' : '/login?next=/generate'
   
   return (
     <Link 
@@ -99,7 +99,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link
-                href="/(auth)/login"
+                href="/login"
                 className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Log in
@@ -149,7 +149,7 @@ export default function Navbar() {
             ) : (
               <>
                 <li>
-                  <Link href="/(auth)/login" className="block py-2 text-sm text-gray-600" onClick={() => setOpen(false)}>
+                  <Link href="/login" className="block py-2 text-sm text-gray-600" onClick={() => setOpen(false)}>
                     Log in
                   </Link>
                 </li>

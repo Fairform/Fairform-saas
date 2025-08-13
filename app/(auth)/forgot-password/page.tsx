@@ -38,7 +38,7 @@ function ForgotPasswordPageContent() {
 
   const handleBackToLogin = () => {
     const next = searchParams?.get('next')
-    const loginUrl = next ? `/(auth)/login?next=${encodeURIComponent(next)}` : '/(auth)/login'
+    const loginUrl = next ? `/login?next=${encodeURIComponent(next)}` : '/login'
     router.push(loginUrl)
   }
 
