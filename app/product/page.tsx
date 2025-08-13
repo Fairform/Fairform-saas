@@ -1,60 +1,27 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useAuth } from '@/hooks/useAuth'
-import { 
-  Check, 
-  ArrowRight, 
-  Clock, 
-  Shield,
-  Zap,
-  Users,
-  Download,
-  Brain,
-  FileText,
-  Star,
-  Play,
-  Building2,
-  Heart,
-  Briefcase,
-  Home,
-  Truck,
-  GraduationCap,
-  ChevronRight,
-  Award,
-  BookOpen,
-  Target,
-  Lightbulb,
-  Package,
-  Settings
-} from 'lucide-react'
-
-// Ultra-minimal orb - barely visible
-const SubtleOrb = ({ className = '' }) => {
-  return (
-    <motion.div
-      className={`absolute w-1 h-1 bg-gray-400/10 rounded-full blur-sm ${className}`}
-      animate={{
-        scale: [1, 1.5, 1],
-        opacity: [0.1, 0.2, 0.1],
-      }}
-      transition={{
-        duration: 4,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
-    />
-  )
-}
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function ProductPage() {
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const { user, session } = useAuth()
+  const router = useRouter()
 
-  const handleGetPack = (packId: string) => {
-    window.location.href = '/pricing'
-  }
+  useEffect(() => {
+    router.push('/pricing')
+  }, [router])
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Subscription Required</h1>
+        <p className="text-gray-600 mb-6">
+          We've moved to a subscription-based model. Redirecting you to our pricing plans...
+        </p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+      </div>
+    </div>
+  )
+}
 
   const documentPacks = [
     {
