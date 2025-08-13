@@ -1,14 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Header />
-
       <main className="pt-32 pb-24 px-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-6">About Formative</h1>
@@ -62,8 +58,6 @@ export default function AboutPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   )
 }
