@@ -275,3 +275,24 @@ export interface AgentResponse {
   data?: any;
   error?: string;
 }
+
+export interface PolicyInsight {
+  id: string;
+  industry: string;
+  document_type: string;
+  insight_type: 'best_practice' | 'common_gap' | 'regulatory_requirement' | 'effective_clause' | 'industry_pattern';
+  insight_content: string;
+  confidence_score: number;
+  source_file_count: number;
+  business_size_context?: string;
+  region_context: string;
+  metadata?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OpenAIIngestionResult {
+  insights: PolicyInsight[];
+  summary: string;
+  tokensUsed: number;
+}

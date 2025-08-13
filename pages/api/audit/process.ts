@@ -150,7 +150,7 @@ export default async function handler(
 
     const analyzedFiles = await analyzeUploadedFiles(auditFiles, businessProfile)
 
-    const auditResults = calculateComplianceScore(analyzedFiles, benchmark, businessProfile)
+    const auditResults = await calculateComplianceScore(analyzedFiles, benchmark, businessProfile)
 
     const enhancedRecommendations = generateIndustryRecommendations(
       businessProfile.industry,
