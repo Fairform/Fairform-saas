@@ -4,12 +4,16 @@ Formative is a comprehensive SaaS platform that generates audit-ready compliance
 
 ## 🚀 Features
 
-- **AI-Powered Document Generation** - Create industry-specific compliance packs instantly
+- **Unified Navigation** - Consistent navbar across all pages with "Formative" branding (no logo display)
+- **AI-Powered Document Generation v2** - Create industry-specific compliance packs instantly with advanced templating
+- **Multi-Format Support** - Generate both PDF and DOCX documents simultaneously with letterhead options
+- **Template Engine** - Industry-specific content blocks with dynamic placeholders and fallback support
+- **Storage Abstraction** - Supports local, Vercel Blob, and Supabase storage providers
 - **Multi-Industry Support** - NDIS, Construction, Childcare, Healthcare, and 20+ sectors
-- **Professional Branding** - Embed logos, ABN, and business details
+- **Professional Branding** - Embed logos, ABN, and business details with customizable letterhead
 - **Stripe Payments** - One-time purchases and subscription billing
 - **User Authentication** - Secure login and document history
-- **Document Management** - DOCX and PDF generation with download tracking
+- **Document Management** - Enhanced DOCX and PDF generation with download tracking
 
 ## 🛠 Tech Stack
 
