@@ -154,7 +154,7 @@ Visit `http://localhost:3000` to see the application.
 │       ├── stripe/        # Payment handling
 │       └── webhooks/      # Webhook handlers
 ├── components/            # Reusable components
-│   ├── Header.tsx
+│   ├── Navbar.tsx
 │   ├── Footer.tsx
 │   ├── AgentCard.tsx
 │   └── ...
