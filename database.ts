@@ -362,6 +362,49 @@ export interface Database {
           updated_at?: string
         }
       }
+
+      policy_insights: {
+        Row: {
+          id: string
+          industry: string
+          document_type: string
+          insight_type: 'best_practice' | 'common_gap' | 'regulatory_requirement' | 'effective_clause' | 'industry_pattern'
+          insight_content: string
+          confidence_score: number
+          source_file_count: number
+          business_size_context: string | null
+          region_context: string
+          metadata: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          industry: string
+          document_type: string
+          insight_type: 'best_practice' | 'common_gap' | 'regulatory_requirement' | 'effective_clause' | 'industry_pattern'
+          insight_content: string
+          confidence_score?: number
+          source_file_count?: number
+          business_size_context?: string | null
+          region_context?: string
+          metadata?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          industry?: string
+          document_type?: string
+          insight_type?: 'best_practice' | 'common_gap' | 'regulatory_requirement' | 'effective_clause' | 'industry_pattern'
+          insight_content?: string
+          confidence_score?: number
+          source_file_count?: number
+          business_size_context?: string | null
+          region_context?: string
+          metadata?: Json | null
+          updated_at?: string
+        }
+      }
     }
 
     Views: {}

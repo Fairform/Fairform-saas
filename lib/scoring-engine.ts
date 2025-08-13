@@ -1,5 +1,6 @@
 import { supabaseAdmin } from './supabase-admin'
 import { callPocketbookLLM } from './pocketbook'
+import { extractPolicyKnowledge } from './openai'
 
 export interface AuditFile {
   id: string
@@ -322,6 +323,32 @@ Provide response in this JSON format:
 
       console.log(`Analysis completed for ${file.fileName}: ${analysisResults.documentType} (Quality: ${analysisResults.qualityScore})`)
 
+      try {
+        console.log(`Starting OpenAI knowledge extraction for ${file.fileName}`)
+        
+        const documentContent = `Document: ${file.fileName}\nAnalysis: ${JSON.stringify(analysisResults)}`;
+        
+        const knowledgeResult = await extractPolicyKnowledge(
+          documentContent,
+          file.fileName,
+          businessProfile.industry,
+          businessProfile
+        );
+
+        if (knowledgeResult.insights.length > 0) {
+          await storePolicyInsights(
+            knowledgeResult.insights,
+            businessProfile.industry,
+            analysisResults.documentType || 'Unknown Document',
+            businessProfile
+          );
+          
+          console.log(`Extracted and stored ${knowledgeResult.insights.length} insights from ${file.fileName}`);
+        }
+      } catch (knowledgeError) {
+        console.warn(`OpenAI knowledge extraction failed for ${file.fileName}:`, knowledgeError);
+      }
+
     } catch (error) {
       console.error(`Failed to analyze file ${file.fileName}:`, error)
       
@@ -341,11 +368,11 @@ Provide response in this JSON format:
   return analyzedFiles
 }
 
-export function calculateComplianceScore(
+export async function calculateComplianceScore(
   analyzedFiles: AuditFile[],
   benchmark: ComplianceBenchmark,
   businessProfile: BusinessProfile
-): AuditResults {
+): Promise<AuditResults> {
   const { requiredPolicies, scoringCriteria } = benchmark
   
   const detectedPolicyTypes = analyzedFiles
@@ -401,6 +428,13 @@ export function calculateComplianceScore(
 
   const recommendations: string[] = []
   
+  const detectedTypes = analyzedFiles.map(f => f.documentTypeDetected || '').filter(Boolean);
+  const relevantInsights = await getRelevantPolicyInsights(
+    businessProfile.industry,
+    detectedTypes,
+    businessProfile
+  );
+  
   if (policyPresenceScore < 80) {
     recommendations.push(`Add missing critical policies: ${missingPolicies.slice(0, 3).join(', ')}${missingPolicies.length > 3 ? ' and others' : ''}`)
   }
@@ -421,6 +455,8 @@ export function calculateComplianceScore(
     recommendations.push('Consider professional compliance review before implementation')
   }
 
+  const enhancedRecommendations = enhanceRecommendationsWithInsights(recommendations, relevantInsights);
+
   const outdatedDocuments = analyzedFiles
     .filter(f => f.analysisResults?.currencyStatus === 'outdated' || 
                  (f.analysisResults?.issues && f.analysisResults.issues.length > 0))
@@ -439,7 +475,7 @@ export function calculateComplianceScore(
     missingPolicies,
     outdatedDocuments,
     completedChecks,
-    recommendations,
+    recommendations: enhancedRecommendations,
     detailedAnalysis: {
       policyPresenceScore,
       contentQualityScore,
@@ -548,4 +584,87 @@ export async function saveAuditResults(
     console.error('Error saving audit results:', error)
     throw error
   }
+}
+
+export async function storePolicyInsights(
+  insights: any[],
+  industry: string,
+  documentType: string,
+  businessProfile: BusinessProfile
+): Promise<void> {
+  try {
+    const insightsToStore = insights.map(insight => ({
+      industry: industry.toLowerCase(),
+      document_type: documentType,
+      insight_type: insight.insight_type,
+      insight_content: insight.insight_content,
+      confidence_score: insight.confidence_score || 50,
+      source_file_count: 1,
+      business_size_context: businessProfile.orgSize,
+      region_context: businessProfile.region || 'australia',
+      metadata: {
+        source_business: businessProfile.businessName,
+        extracted_at: new Date().toISOString()
+      }
+    }));
+
+    const { error } = await supabaseAdmin
+      .from('policy_insights')
+      .insert(insightsToStore);
+
+    if (error) {
+      throw new Error(`Failed to store policy insights: ${error.message}`);
+    }
+
+    console.log(`Stored ${insightsToStore.length} policy insights for ${industry}/${documentType}`);
+  } catch (error) {
+    console.error('Error storing policy insights:', error);
+    throw error;
+  }
+}
+
+export async function getRelevantPolicyInsights(
+  industry: string,
+  documentTypes: string[],
+  businessProfile: BusinessProfile
+): Promise<any[]> {
+  try {
+    const { data: insights, error } = await supabaseAdmin
+      .from('policy_insights')
+      .select('*')
+      .eq('industry', industry.toLowerCase())
+      .in('document_type', documentTypes)
+      .gte('confidence_score', 60)
+      .order('confidence_score', { ascending: false })
+      .limit(20);
+
+    if (error) {
+      throw new Error(`Failed to retrieve policy insights: ${error.message}`);
+    }
+
+    return insights || [];
+  } catch (error) {
+    console.error('Error retrieving policy insights:', error);
+    return [];
+  }
+}
+
+export function enhanceRecommendationsWithInsights(
+  baseRecommendations: string[],
+  insights: any[]
+): string[] {
+  const enhancedRecommendations = [...baseRecommendations];
+  
+  const bestPractices = insights.filter(i => i.insight_type === 'best_practice');
+  const commonGaps = insights.filter(i => i.insight_type === 'common_gap');
+  
+  bestPractices.slice(0, 2).forEach(insight => {
+    enhancedRecommendations.push(`Best Practice: ${insight.insight_content}`);
+  });
+  
+  commonGaps.slice(0, 2).forEach(insight => {
+    enhancedRecommendations.push(`Common Gap to Address: ${insight.insight_content}`);
+  });
+  
+  return enhancedRecommendations.slice(0, 10);
 }
