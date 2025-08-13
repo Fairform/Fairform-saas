@@ -12,6 +12,7 @@ interface AuthContextType {
   signOut: () => Promise<void>
   signIn: (email: string, password: string) => Promise<any>
   signUp: (email: string, password: string, metadata?: any) => Promise<any>
+  resetPassword: (email: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -92,7 +93,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password,
         options: {
-          data: metadata
+          data: metadata,
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/(auth)/reset-password`
         }
       })
       
@@ -104,6 +106,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/(auth)/reset-password`
+      })
+      if (error) throw error
+    } catch (error) {
+      console.error('Reset password error:', error)
+      throw error
+    }
+  }
+
   const value: AuthContextType = {
     user,
     session,
@@ -111,6 +125,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signOut,
     signIn,
     signUp,
+    resetPassword,
   }
 
   return React.createElement(

@@ -26,15 +26,25 @@ export async function middleware(req: NextRequest) {
   
   response.headers.set('Content-Security-Policy', csp)
   
-  const isProtectedRoute = req.nextUrl.pathname.startsWith('/dashboard')
-  const isAuthRoute = req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/signup')
+  const isProtectedRoute = req.nextUrl.pathname.startsWith('/dashboard') || 
+                          req.nextUrl.pathname.startsWith('/generate') ||
+                          req.nextUrl.pathname.startsWith('/checkout')
+  const isAuthRoute = req.nextUrl.pathname.startsWith('/(auth)/')
 
-  // For now, we'll just pass through all requests
-  // You can implement proper authentication checks here
+  if (isProtectedRoute && !isAuthRoute) {
+    const token = req.cookies.get('sb-access-token')
+    const refreshToken = req.cookies.get('sb-refresh-token')
+    
+    if (!token && !refreshToken) {
+      const loginUrl = new URL('/(auth)/login', req.url)
+      loginUrl.searchParams.set('next', req.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
   
   return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup']
+  matcher: ['/dashboard/:path*', '/(auth)/:path*', '/generate', '/checkout/:path*']
 }

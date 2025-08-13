@@ -9,6 +9,7 @@
     "lint": "next lint",
     "lint:templates": "node scripts/lint-templates.js",
     "precommit": "npm run lint:templates && npm run lint",
+    "check-navbar": "! grep -r 'import.*[Hh]eader' app/ components/ --exclude-dir=node_modules || echo 'Found duplicate header imports'",
     "type-check": "tsc --noEmit",
     "setup": "chmod +x scripts/setup-codespaces.sh && ./scripts/setup-codespaces.sh",
     "db:generate": "supabase gen types typescript --local > types/supabase.ts",
