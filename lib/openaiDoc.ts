@@ -15,7 +15,7 @@ export async function generateDocumentContent(
   documentType: string,
   businessInfo: BusinessInfo,
   industry:  string,
-): sromisetring>
+): Promise<string> {
   const systemPrompt = 'You are a master business document generator specialized in Australian compliance regulations. You produce detailed, professional documents that meet legal requirements for each industry.';
 
   const prompt =

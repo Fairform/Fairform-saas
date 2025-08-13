@@ -1,0 +1,27 @@
+[
+  {
+    "title": "NDIS Quality Framework Commitment",
+    "content": "<p>As an NDIS registered provider, we are committed to delivering high-quality supports and services that meet the NDIS Quality and Safeguards Framework requirements.</p><p>Our quality system ensures continuous improvement and participant-centered service delivery.</p>",
+    "order": 1
+  },
+  {
+    "title": "Quality Management System",
+    "content": "<p>Our quality management system includes:</p><ul><li>Regular quality audits and reviews</li><li>Participant feedback mechanisms</li><li>Staff training and competency assessments</li><li>Incident management and reporting</li><li>Continuous improvement processes</li></ul>",
+    "order": 2
+  },
+  {
+    "title": "Participant Rights and Choice",
+    "content": "<p>We respect and promote participant rights including:</p><ul><li>Choice and control over supports</li><li>Dignity and respect in all interactions</li><li>Privacy and confidentiality</li><li>Freedom from abuse, neglect, and exploitation</li><li>Access to complaints and feedback processes</li></ul>",
+    "order": 3
+  },
+  {
+    "title": "Service Delivery Standards",
+    "content": "<p>All services are delivered in accordance with:</p><ul><li>NDIS Practice Standards</li><li>Participant's individual goals and preferences</li><li>Evidence-based practices</li><li>Cultural safety requirements</li><li>Professional codes of conduct</li></ul>",
+    "order": 4
+  },
+  {
+    "title": "Quality Monitoring and Review",
+    "content": "<p>We monitor quality through:</p><ul><li>Regular participant satisfaction surveys</li><li>Internal quality audits</li><li>External compliance reviews</li><li>Staff performance evaluations</li><li>Outcome measurement and reporting</li></ul><p>Quality data is used to drive continuous improvement initiatives.</p>",
+    "order": 5
+  }
+]

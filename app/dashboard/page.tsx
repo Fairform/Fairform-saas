@@ -78,35 +78,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <span className="text-lg font-medium text-gray-900">Formative</span>
-              
-              <nav className="hidden md:flex items-center space-x-6">
-                <button className="text-sm text-gray-900 font-medium">Dashboard</button>
-                <a href="/dashboard/documents" className="text-sm text-gray-600 hover:text-gray-900">Documents</a>
-                <button className="text-sm text-gray-600 hover:text-gray-900">Compliance Agents</button>
-              </nav>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                {user.user_metadata?.company || user.email}
-              </span>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign out</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}

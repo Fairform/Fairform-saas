@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Purpose and Scope",
+    "content": "<p>This Privacy Policy outlines how we collect, use, store, and protect personal information in accordance with the Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs).</p><p>This policy applies to all personal information collected by our organization in the course of providing services.</p>",
+    "order": 1
+  },
+  {
+    "title": "Information We Collect",
+    "content": "<p>We may collect the following types of personal information:</p><ul><li>Contact details (name, address, phone, email)</li><li>Identification information</li><li>Service-related information</li><li>Financial information (where applicable)</li><li>Health information (where relevant to services)</li></ul>",
+    "order": 2
+  },
+  {
+    "title": "How We Use Information",
+    "content": "<p>Personal information is used for:</p><ul><li>Providing and improving our services</li><li>Communication with clients and stakeholders</li><li>Compliance with legal obligations</li><li>Internal business operations</li><li>Quality assurance and training</li></ul>",
+    "order": 3
+  },
+  {
+    "title": "Information Security",
+    "content": "<p>We implement appropriate security measures to protect personal information from:</p><ul><li>Unauthorized access or disclosure</li><li>Misuse or interference</li><li>Loss or unauthorized modification</li></ul><p>Security measures include physical, technical, and administrative safeguards.</p>",
+    "order": 4
+  },
+  {
+    "title": "Your Rights",
+    "content": "<p>You have the right to:</p><ul><li>Access your personal information</li><li>Request correction of inaccurate information</li><li>Make a complaint about privacy breaches</li><li>Request deletion of information (subject to legal requirements)</li></ul><p>Contact us to exercise these rights or for privacy-related inquiries.</p>",
+    "order": 5
+  }
+]
