@@ -8,7 +8,6 @@ export type CatalogDoc = {
 export type PackDefinition = {
   id: string;
   label: string;
-  price: number;
   formats: string[];
   includes: "subset" | "all" | "all-plus-extras";
 };
@@ -22,80 +21,80 @@ export const INDUSTRY_PACKS: Record<string, IndustryPack> = {
   "construction-trades": {
     label: "Construction & Trades",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" },
-      { id: "construction-full", label: "Construction Compliance Pack", price: 349, formats: ["pdf", "docx"], includes: "all-plus-extras" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" },
+      { id: "construction-full", label: "Construction Compliance Pack", formats: ["pdf", "docx"], includes: "all-plus-extras" }
     ]
   },
   "ndis": {
     label: "NDIS Providers",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" },
-      { id: "ndis-full", label: "NDIS Compliance Pack", price: 349, formats: ["pdf", "docx"], includes: "all-plus-extras" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" },
+      { id: "ndis-full", label: "NDIS Compliance Pack", formats: ["pdf", "docx"], includes: "all-plus-extras" }
     ]
   },
   "childcare": {
     label: "Childcare & Education",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "cleaning-services": {
     label: "Cleaning Services",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "fitness-gyms": {
     label: "Fitness Studios & Gyms",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "beauty-personal-care": {
     label: "Beauty & Personal Care",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "hospitality": {
     label: "Hospitality",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "health-services": {
     label: "Health Services",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "retail-ecommerce": {
     label: "Retail & E-Commerce",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "freelancers-coaches": {
     label: "Freelancers & Coaches",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   },
   "small-business": {
     label: "Generic Small Business Essentials",
     packs: [
-      { id: "lite", label: "Lite Pack", price: 79, formats: ["pdf"], includes: "subset" },
-      { id: "pro", label: "Pro Pack", price: 189, formats: ["pdf", "docx"], includes: "all" }
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
     ]
   }
 };

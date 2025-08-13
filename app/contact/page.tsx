@@ -87,7 +87,7 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <Logo width={24} height={24} showText={true} />
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">

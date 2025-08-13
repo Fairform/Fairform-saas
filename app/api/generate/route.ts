@@ -4,7 +4,7 @@ import { CatalogTemplateEngine } from '@/lib/catalog-engine'
 import { createClient } from '@/lib/supabase-server'
 import { validateIndustryPack, getDocumentsForPack } from '@/lib/catalog'
 import { rateLimit } from '@/lib/rate-limit'
-import { checkDocumentGenerationLimit, trackDocumentGeneration } from '@/lib/access-control'
+import { checkDocumentGenerationLimit, trackDocumentGeneration, checkUserPackAccess } from '@/lib/access-control'
 
 const generateSchema = z.object({
   businessName: z.string().min(1, 'Business name is required').max(100),
@@ -55,6 +55,16 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const validatedData = generateSchema.parse(body)
+
+    const hasPackAccess = await checkUserPackAccess(user.id, validatedData.industry, validatedData.pack)
+    if (!hasPackAccess) {
+      return NextResponse.json({
+        error: 'Pack access required',
+        details: 'Please subscribe to a plan or purchase this specific pack to generate documents.',
+        redirectTo: '/pricing'
+      }, { status: 402 })
+    }
+
 
     if (!validateIndustryPack(validatedData.industry, validatedData.pack)) {
       return NextResponse.json(

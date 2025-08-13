@@ -53,10 +53,7 @@ export default function ProductPage() {
   const { user, session } = useAuth()
 
   const handleGetPack = (packId: string) => {
-    const industryId = packId.split('-')[0]
-    const nextPath = `/checkout/${industryId}/${packId}`
-    const href = user ? nextPath : `/(auth)/login?next=${encodeURIComponent(nextPath)}`
-    window.location.href = href
+    window.location.href = '/pricing'
   }
 
   const documentPacks = [
@@ -375,8 +372,8 @@ export default function ProductPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-900">{pack.price}</div>
-                    <div className="text-sm text-gray-500">AUD</div>
+                    <div className="text-sm font-medium text-blue-600">Subscription Required</div>
+                    <div className="text-xs text-gray-500">See Pricing</div>
                   </div>
                 </div>
 
@@ -446,7 +443,7 @@ export default function ProductPage() {
                     }`}
                   >
                     <Package className="w-4 h-4" />
-                    <span>Get This Pack</span>
+                    <span>View Pricing</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                   <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-3 rounded-lg transition-colors">

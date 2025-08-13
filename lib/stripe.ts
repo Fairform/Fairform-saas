@@ -184,6 +184,29 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
       'Custom template development',
       'Dedicated account manager'
     ]
+  },
+
+  enterprise_custom: {
+    id: 'enterprise_custom',
+    name: 'Enterprise',
+    description: 'Custom enterprise solution with dedicated support',
+    price: 0, // Custom pricing
+    currency: 'aud',
+    type: 'recurring',
+    interval: 'month',
+    priceId: 'price_enterprise_custom', // Custom pricing handled separately
+    category: 'agency',
+    features: [
+      'Unlimited document generation',
+      'White-label capabilities',
+      'Custom branding and templates',
+      'Multi-location management',
+      'API access and integrations',
+      'Dedicated account manager',
+      'Custom compliance frameworks',
+      'Priority phone support',
+      'Custom training and onboarding'
+    ]
   }
 };
 

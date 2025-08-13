@@ -357,3 +357,25 @@ export async function hasActiveSubscription(userId: string): Promise<boolean> {
   const subscriptions = await getUserSubscriptions(userId)
   return subscriptions.length > 0
 }
+
+// Check if user has access to a specific pack (either through subscription or direct purchase)
+export async function checkUserPackAccess(userId: string, industryId: string, packId: string): Promise<boolean> {
+  try {
+    const subscriptions = await getUserSubscriptions(userId)
+    const hasUnlimitedAccess = subscriptions.some(sub => 
+      sub.product_name.includes('Pro') || 
+      sub.product_name.includes('Agency') ||
+      sub.product_name.includes('Enterprise')
+    )
+    
+    if (hasUnlimitedAccess) {
+      return true
+    }
+    
+    const packName = `${industryId}-${packId}`
+    return await checkUserAccess(userId, packName)
+  } catch (error) {
+    console.error('Error in checkUserPackAccess:', error)
+    return false
+  }
+}
