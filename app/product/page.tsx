@@ -53,11 +53,10 @@ export default function ProductPage() {
   const { user, session } = useAuth()
 
   const handleGetPack = (packId: string) => {
-    if (!user || !session) {
-      window.location.href = '/login'
-      return
-    }
-    window.location.href = '/pricing'
+    const industryId = packId.split('-')[0]
+    const nextPath = `/checkout/${industryId}/${packId}`
+    const href = user ? nextPath : `/(auth)/login?next=${encodeURIComponent(nextPath)}`
+    window.location.href = href
   }
 
   const documentPacks = [
@@ -289,29 +288,6 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <header className="w-full border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-8">
-            <a href="/" className="flex items-center space-x-2">
-              <span className="text-lg font-medium text-gray-900">Formative</span>
-            </a>
-            
-            <nav className="hidden md:flex items-center space-x-6">
-              <a href="/product" className="text-sm text-gray-900 font-medium">Product</a>
-              <a href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</a>
-              <a href="/about" className="text-sm text-gray-600 hover:text-gray-900">About</a>
-            </nav>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <a href="/login" className="text-sm text-gray-600 hover:text-gray-900">Log in</a>
-            <a href="/signup" className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
-              Sign up
-            </a>
-          </div>
-        </div>
-      </header>
 
       {/* Main content */}
       <main>

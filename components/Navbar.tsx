@@ -5,6 +5,21 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { LogOut, Menu, X } from 'lucide-react';
 
+function GenerateCTA() {
+  const { user } = useAuth()
+  
+  const href = user ? '/generate' : '/(auth)/login?next=/generate'
+  
+  return (
+    <Link 
+      href={href} 
+      className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+    >
+      Generate Document
+    </Link>
+  )
+}
+
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'Smart Audit', href: '/audit' },
@@ -83,17 +98,12 @@ export default function Navbar() {
           ) : (
             <>
               <Link
-                href="/login"
+                href="/(auth)/login"
                 className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Log in
               </Link>
-              <Link
-                href={NAV_CTA.href}
-                className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
-              >
-                {NAV_CTA.label}
-              </Link>
+              <GenerateCTA />
             </>
           )}
         </div>
@@ -138,14 +148,14 @@ export default function Navbar() {
             ) : (
               <>
                 <li>
-                  <Link href="/login" className="block py-2 text-sm text-gray-600" onClick={() => setOpen(false)}>
+                  <Link href="/(auth)/login" className="block py-2 text-sm text-gray-600" onClick={() => setOpen(false)}>
                     Log in
                   </Link>
                 </li>
                 <li>
-                  <Link href={NAV_CTA.href} className="block py-2 text-sm font-medium text-gray-900" onClick={() => setOpen(false)}>
-                    {NAV_CTA.label}
-                  </Link>
+                  <div className="block py-2">
+                    <GenerateCTA />
+                  </div>
                 </li>
               </>
             )}
