@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,12 +7,42 @@ import { LogOut, Menu, X } from 'lucide-react';
 
 function GenerateCTA() {
   const { user } = useAuth()
+  const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null)
   
-  const href = user ? '/generate' : '/login?next=/generate'
+  useEffect(() => {
+    if (user) {
+      fetch(`/api/user/subscription-status?userId=${user.id}`)
+        .then(res => res.json())
+        .then(data => setSubscriptionStatus(data))
+        .catch(err => console.error('Error fetching subscription status:', err))
+    }
+  }, [user])
+  
+  if (!user) {
+    return (
+      <Link 
+        href="/login?next=/pricing" 
+        className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+      >
+        Subscribe Now
+      </Link>
+    )
+  }
+  
+  if (subscriptionStatus && !subscriptionStatus.canGenerate) {
+    return (
+      <Link 
+        href="/pricing" 
+        className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+      >
+        Subscribe Now
+      </Link>
+    )
+  }
   
   return (
     <Link 
-      href={href} 
+      href="/generate" 
       className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
     >
       Generate Document
