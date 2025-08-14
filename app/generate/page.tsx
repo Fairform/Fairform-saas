@@ -79,7 +79,7 @@ export default function GeneratePage() {
     e.preventDefault()
     
     if (!subscriptionStatus?.canGenerate) {
-      alert('Please subscribe to a plan to generate documents.')
+      alert('Please subscribe to a plan or purchase a pack to generate documents.')
       window.location.href = '/pricing'
       return
     }
@@ -137,15 +137,18 @@ export default function GeneratePage() {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold mb-4">Subscription Required</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Access Required</h1>
           <p className="text-gray-600 mb-8">
-            {subscriptionStatus.limit === 0 
-              ? 'Please subscribe to a plan to generate documents.'
-              : `You've reached your monthly limit of ${subscriptionStatus.limit} documents.`}
+            You need an active subscription or purchased pack to generate documents. Choose from our flexible pricing options.
           </p>
-          <Button onClick={() => window.location.href = '/pricing'}>
-            View Plans
-          </Button>
+          <div className="space-y-4">
+            <Button onClick={() => window.location.href = '/pricing'}>
+              View Pricing Options
+            </Button>
+            <p className="text-sm text-gray-500">
+              Choose between monthly subscriptions or one-time industry packs
+            </p>
+          </div>
         </div>
       </div>
     )
