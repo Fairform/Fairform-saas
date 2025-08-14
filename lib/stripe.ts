@@ -25,7 +25,7 @@ export interface StripeProduct {
   priceId: string; // Stripe Price ID - fill these in from your Stripe dashboard
   features: string[];
   popular?: boolean;
-  category: 'lite' | 'pro' | 'ndis' | 'construction' | 'starter' | 'agency';
+  category: 'lite' | 'pro' | 'ndis' | 'construction' | 'starter' | 'agency' | 'enterprise';
 }
 
 export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
@@ -195,7 +195,7 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
     type: 'recurring',
     interval: 'month',
     priceId: 'price_enterprise_custom', // Custom pricing handled separately
-    category: 'agency',
+    category: 'enterprise',
     features: [
       'Unlimited document generation',
       'White-label capabilities',
