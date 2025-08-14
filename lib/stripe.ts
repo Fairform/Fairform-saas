@@ -29,7 +29,74 @@ export interface StripeProduct {
 }
 
 export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
-  // ONE-TIME PURCHASES
+  starter_plan: {
+    id: 'starter_plan',
+    name: 'Starter',
+    description: 'Monthly access to essential compliance tools',
+    price: 12900, // $129 in cents
+    currency: 'aud',
+    type: 'recurring',
+    interval: 'month',
+    priceId: 'price_1RlBbGPxQ5QMKmITp7UhoGQp',
+    category: 'starter',
+    features: [
+      'Generate up to 3 documents/month',
+      'Basic compliance templates',
+      'Industry-specific customization',
+      'PDF & DOCX downloads',
+      'Email support',
+      'Regular template updates',
+      'Cancel anytime'
+    ]
+  },
+
+  pro_plan: {
+    id: 'pro_plan',
+    name: 'Pro',
+    description: 'Advanced monthly compliance solution',
+    price: 17900, // $179 in cents
+    currency: 'aud',
+    type: 'recurring',
+    interval: 'month',
+    priceId: 'price_1RlBbHPxQ5QMKmITp7UhoGQq',
+    category: 'pro',
+    popular: true,
+    features: [
+      'Unlimited document generation',
+      'All compliance templates',
+      'All industry templates',
+      'Advanced industry templates',
+      'Risk assessment tools',
+      'Priority email support',
+      'Template customization requests',
+      'Quarterly compliance updates'
+    ]
+  },
+
+  agency_plan: {
+    id: 'agency_plan',
+    name: 'Agency',
+    description: 'Enterprise solution for agencies and consultants',
+    price: 49900, // $499 in cents
+    currency: 'aud',
+    type: 'recurring',
+    interval: 'month',
+    priceId: 'price_1RlBbIPxQ5QMKmITp7UhoGQr',
+    category: 'agency',
+    features: [
+      'Unlimited document generation',
+      'White-label capabilities',
+      'Custom branding options',
+      'Multi-client management',
+      'API access',
+      'Bulk document generation',
+      'Priority phone & email support',
+      'Custom template development',
+      'Dedicated account manager'
+    ]
+  },
+
+  // ONE-TIME PACKS
   lite_pack: {
     id: 'lite_pack',
     name: 'Lite Pack',
@@ -37,7 +104,7 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
     price: 7900, // $79 in cents
     currency: 'aud',
     type: 'one_time',
-    priceId: 'price_1RlBbGPxQ5QMKmITp7UhoGQp', // Replace with actual Stripe Price ID
+    priceId: 'price_1RlBbJPxQ5QMKmITp7UhoGQs',
     category: 'lite',
     features: [
       'Basic compliance templates',
@@ -45,7 +112,7 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
       'Privacy policy template',
       'Terms & conditions',
       'Basic workplace policies',
-      'PDF & DOCX formats',
+      'PDF format only',
       'Email support'
     ]
   },
@@ -57,9 +124,8 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
     price: 18900, // $189 in cents
     currency: 'aud',
     type: 'one_time',
-    priceId: 'price_1RlBfFPxQ5QMKmITcZuIxr0g', // Replace with actual Stripe Price ID
+    priceId: 'price_1RlBbKPxQ5QMKmITp7UhoGQt',
     category: 'pro',
-    popular: true,
     features: [
       'All Lite Pack features',
       'Advanced compliance templates',
@@ -68,18 +134,19 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
       'HR policy suite',
       'Customer agreements',
       'Supplier agreements',
+      'PDF & DOCX formats',
       'Priority email support'
     ]
   },
 
-  ndis_full_pack: {
-    id: 'ndis_full_pack',
+  ndis_full: {
+    id: 'ndis_full',
     name: 'NDIS Full Pack',
     description: 'Complete NDIS compliance documentation suite',
     price: 49900, // $499 in cents
     currency: 'aud',
     type: 'one_time',
-    priceId: 'price_1RlBgpPxQ5QMKmITotDVChes', // Replace with actual Stripe Price ID
+    priceId: 'price_1RlBbLPxQ5QMKmITp7UhoGQu',
     category: 'ndis',
     features: [
       'NDIS-specific service agreements',
@@ -91,30 +158,31 @@ export const STRIPE_PRODUCTS: Record<string, StripeProduct> = {
       'Emergency response plans',
       'Staff training materials',
       'Audit-ready documentation',
+      'PDF & DOCX formats',
       'Phone support included'
     ]
   },
 
-  construction_pack: {
-    id: 'construction_pack',
-    name: 'Construction Pack',
-    description: 'Specialized compliance for construction & trades',
+  construction_full: {
+    id: 'construction_full',
+    name: 'Construction Compliance Pack',
+    description: 'Complete construction industry compliance suite',
     price: 34900, // $349 in cents
     currency: 'aud',
     type: 'one_time',
-    priceId: 'price_1RlBiLPxQ5QMKmITIrR6FqgI', // Replace with actual Stripe Price ID
+    priceId: 'price_1RlBbMPxQ5QMKmITp7UhoGQv',
     category: 'construction',
     features: [
+      'WHS policies and procedures',
+      'Risk assessment templates',
+      'Safety management systems',
+      'Compliance checklists',
       'SWMS templates',
       'JSA (Job Safety Analysis)',
-      'Hazard registers',
-      'PPE checklists',
-      'Toolbox talk templates',
-      'Equipment maintenance logs',
-      'Incident report forms',
-      'Emergency response plans',
-      'Contractor agreements',
-      'WHS procedures'
+      'Incident reporting forms',
+      'Emergency procedures',
+      'PDF & DOCX formats',
+      'Priority support'
     ]
   },
 
@@ -217,12 +285,13 @@ export function getProductById(productId: string): StripeProduct | null {
   return STRIPE_PRODUCTS[productId] || null;
 }
 
-export function getOneTimeProducts(): StripeProduct[] {
-  return Object.values(STRIPE_PRODUCTS).filter(product => product.type === 'one_time');
-}
 
 export function getSubscriptionProducts(): StripeProduct[] {
   return Object.values(STRIPE_PRODUCTS).filter(product => product.type === 'recurring');
+}
+
+export function getOneTimeProducts(): StripeProduct[] {
+  return Object.values(STRIPE_PRODUCTS).filter(product => product.type === 'one_time');
 }
 
 export function getSubscriptionProductsForPricing(): StripeProduct[] {
@@ -251,7 +320,8 @@ export function formatPrice(product: StripeProduct): string {
 
 export function formatPriceForPricing(product: StripeProduct): string {
   if (product.price === 0) return 'Custom Pricing'
-  return `$${(product.price / 100).toFixed(0)}/month`
+  const price = `$${(product.price / 100).toFixed(0)}`
+  return product.type === 'one_time' ? price : `${price}/month`
 }
 
 // Validate if a price ID exists in our products
@@ -263,6 +333,7 @@ export function isValidPriceId(priceId: string): boolean {
 export function getProductByPriceId(priceId: string): StripeProduct | null {
   return Object.values(STRIPE_PRODUCTS).find(product => product.priceId === priceId) || null;
 }
+
 
 // ================================
 // EXISTING STRIPE FUNCTIONS

@@ -100,21 +100,36 @@ export async function checkDocumentGenerationLimit(userId: string): Promise<{
   remaining: number
 }> {
   try {
-    // Get user's access level
-    const access = await getUserAccess(userId)
+    // Check for active subscriptions
+    const subscriptions = await getUserSubscriptions(userId)
     
-    // Determine limit based on access
+    // Check for one-time pack access
+    const userAccess = await getUserAccess(userId)
+    const hasOneTimePacks = userAccess.length > 0
+
+    if (subscriptions.length === 0 && !hasOneTimePacks) {
+      return {
+        canGenerate: false,
+        limit: 0,
+        used: 0,
+        remaining: 0
+      }
+    }
+
+    // Determine limit based on subscription
     let limit = 0
-    
-    // Check for unlimited plans (Pro, Agency, or one-time purchases)
-    if (access.some(a => 
-      a.product_name.includes('Pro') || 
-      a.product_name.includes('Agency') ||
-      a.access_type === 'one_time'
-    )) {
-      limit = -1 // Unlimited
-    } else if (access.some(a => a.product_name.includes('Starter'))) {
-      limit = 3 // Starter plan limit
+    for (const sub of subscriptions) {
+      if (sub.product_name.includes('Starter')) {
+        limit = Math.max(limit, 3)
+      } else if (sub.product_name.includes('Pro') || sub.product_name.includes('Agency') || sub.product_name.includes('Enterprise')) {
+        limit = -1
+        break
+      }
+    }
+
+    // One-time packs provide unlimited generation for purchased documents
+    if (hasOneTimePacks && limit === 0) {
+      limit = -1
     }
 
     // If unlimited, return early
@@ -137,7 +152,7 @@ export async function checkDocumentGenerationLimit(userId: string): Promise<{
       }
     }
 
-    // Count documents generated this month
+    // Count documents generated this month (only for subscription limits)
     const startOfMonth = new Date()
     startOfMonth.setDate(1)
     startOfMonth.setHours(0, 0, 0, 0)
@@ -371,6 +386,7 @@ export async function hasActiveSubscription(userId: string): Promise<boolean> {
 // Check if user has access to a specific pack (either through subscription or direct purchase)
 export async function checkUserPackAccess(userId: string, industryId: string, packId: string): Promise<boolean> {
   try {
+    // Check for subscription access (Pro/Agency/Enterprise get all packs)
     const subscriptions = await getUserSubscriptions(userId)
     const hasUnlimitedAccess = subscriptions.some(sub => 
       sub.product_name.includes('Pro') || 
@@ -382,8 +398,23 @@ export async function checkUserPackAccess(userId: string, industryId: string, pa
       return true
     }
     
+    // Check for specific one-time pack purchase
     const packName = `${industryId}-${packId}`
-    return await checkUserAccess(userId, packName)
+    const hasPackAccess = await checkUserAccess(userId, packName)
+    
+    // Check for industry-wide pack access (e.g., NDIS Full, Construction Full)
+    const industryPackName = `${industryId}-full`
+    const hasIndustryAccess = await checkUserAccess(userId, industryPackName)
+    
+    // Check for lite pack access
+    const litePackName = 'lite-pack'
+    const hasLiteAccess = await checkUserAccess(userId, litePackName)
+    
+    // Check for pro pack access (covers all basic documents)
+    const proPackName = 'pro-pack'
+    const hasProPackAccess = await checkUserAccess(userId, proPackName)
+    
+    return hasPackAccess || hasIndustryAccess || hasLiteAccess || hasProPackAccess
   } catch (error) {
     console.error('Error in checkUserPackAccess:', error)
     return false
