@@ -19,7 +19,7 @@ function SubscriptionCheckoutContent() {
 
   useEffect(() => {
     if (!user) {
-      router.push(`/(auth)/login?next=/checkout/subscription/${priceId}`)
+      router.push(`/login?next=/checkout/subscription/${priceId}`)
       return
     }
 

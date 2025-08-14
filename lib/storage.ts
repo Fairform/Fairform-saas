@@ -31,6 +31,29 @@ export async function storeFile(
     };
   }
   
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const { createClient } = await import('@/lib/supabase-server')
+      const supabase = createClient()
+      
+      const { data, error } = await supabase.storage
+        .from('documents')
+        .upload(fileName, buffer, {
+          contentType: mimeType,
+          upsert: false
+        })
+      
+      if (error) throw error
+      
+      return {
+        id,
+        url: `/api/download/${id}?type=${extension}`,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      }
+    } catch (error) {
+      console.warn('Supabase Storage not available, falling back to data URI:', (error as Error).message);
+    }
+  }
   
   return {
     id,
@@ -50,6 +73,28 @@ export async function getFile(id: string, extension?: string): Promise<Buffer | 
       return await fs.readFile(filePath);
     } catch (error) {
       console.error('Error reading file:', error);
+      return null;
+    }
+  }
+  
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const { createClient } = await import('@/lib/supabase-server')
+      const supabase = createClient()
+      
+      const fileName = extension ? `${id}.${extension}` : `${id}.pdf`;
+      const { data, error } = await supabase.storage
+        .from('documents')
+        .download(fileName)
+      
+      if (error || !data) {
+        console.error('Error downloading from Supabase Storage:', error);
+        return null;
+      }
+      
+      return Buffer.from(await data.arrayBuffer());
+    } catch (error) {
+      console.error('Error accessing Supabase Storage:', error);
       return null;
     }
   }

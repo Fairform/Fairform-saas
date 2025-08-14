@@ -81,8 +81,9 @@ export const getServiceRoleClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
   
-  if (!supabaseUrl || !supabaseServiceKey) {
-    throw new Error('Missing Supabase service role configuration')
+  if (!supabaseUrl || !supabaseServiceKey || supabaseUrl.includes('your-project') || supabaseServiceKey.includes('your-service-role-key')) {
+    console.warn('Supabase service role not configured, returning null client')
+    return null
   }
   
   return createClient(supabaseUrl, supabaseServiceKey, {

@@ -42,7 +42,7 @@ export default function GeneratePage() {
 
   useEffect(() => {
     if (!user) {
-      window.location.href = '/(auth)/login?next=/generate'
+      window.location.href = '/login?next=/generate'
       return
     }
 
@@ -291,7 +291,6 @@ export default function GeneratePage() {
                   <>
                     <FileText className="mr-2 h-4 w-4" />
                     Generate {selectedDocuments.length} Document{selectedDocuments.length !== 1 ? 's' : ''}
-                    {selectedPack && ` - $${selectedPack.price}`}
                   </>
                 )}
               </Button>

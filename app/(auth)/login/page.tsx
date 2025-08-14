@@ -141,35 +141,13 @@ function LoginPageContent() {
 
   const handleForgotPassword = () => {
     const next = searchParams?.get('next')
-    const forgotUrl = next ? `/(auth)/forgot-password?next=${encodeURIComponent(next)}` : '/(auth)/forgot-password'
+    const forgotUrl = next ? `/forgot-password?next=${encodeURIComponent(next)}` : '/forgot-password'
     router.push(forgotUrl)
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <div className="flex flex-col min-h-screen">
-        <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-6xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <NavigationLink href="/" className="text-xl font-bold text-gray-900">
-                Formative
-              </NavigationLink>
-
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-900 font-medium">
-                  {isSignUp ? 'Sign up' : 'Log in'}
-                </span>
-                <button
-                  onClick={handleModeSwitch}
-                  className="bg-black text-white text-sm px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
-                >
-                  {isSignUp ? 'Log in' : 'Sign up'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
         <main className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">

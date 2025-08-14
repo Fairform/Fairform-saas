@@ -40,7 +40,7 @@ export default function PrivacyPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <NavigationLink href="/" className="flex items-center space-x-2">
-              <Logo width={24} height={24} showText={true} />
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </NavigationLink>
             
             <nav className="hidden md:flex items-center space-x-6">
@@ -908,7 +908,7 @@ export default function PrivacyPage() {
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
             <div className="flex items-center space-x-2">
-              <Logo width={24} height={24} showText={true} />
+              <span className="text-lg font-medium text-gray-900">Formative</span>
             </div>
             
             <div className="flex flex-wrap gap-6 text-sm text-gray-600">

@@ -182,6 +182,11 @@ export async function checkDocumentGenerationLimit(userId: string): Promise<{
 // Track document generation
 export async function trackDocumentGeneration(userId: string, documentId: string): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping document tracking')
+      return
+    }
+    
     const { error } = await supabase.rpc('track_document_usage', {
       p_user_id: userId,
       p_document_id: documentId
@@ -204,6 +209,11 @@ export async function trackDocumentDownload(
   userAgent?: string
 ): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping download tracking')
+      return
+    }
+    
     const { error } = await supabase
       .from('user_downloads')
       .insert({
@@ -356,4 +366,26 @@ export async function canGenerateDocuments(userId: string): Promise<boolean> {
 export async function hasActiveSubscription(userId: string): Promise<boolean> {
   const subscriptions = await getUserSubscriptions(userId)
   return subscriptions.length > 0
+}
+
+// Check if user has access to a specific pack (either through subscription or direct purchase)
+export async function checkUserPackAccess(userId: string, industryId: string, packId: string): Promise<boolean> {
+  try {
+    const subscriptions = await getUserSubscriptions(userId)
+    const hasUnlimitedAccess = subscriptions.some(sub => 
+      sub.product_name.includes('Pro') || 
+      sub.product_name.includes('Agency') ||
+      sub.product_name.includes('Enterprise')
+    )
+    
+    if (hasUnlimitedAccess) {
+      return true
+    }
+    
+    const packName = `${industryId}-${packId}`
+    return await checkUserAccess(userId, packName)
+  } catch (error) {
+    console.error('Error in checkUserPackAccess:', error)
+    return false
+  }
 }

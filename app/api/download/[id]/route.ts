@@ -11,12 +11,33 @@ export async function GET(
     const type = searchParams.get('type') || 'pdf'
     const fileId = params.id
 
-    const fileBuffer = await getFile(fileId, type)
+    let fileBuffer: Buffer | null = null
+    
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const { createClient } = await import('@/lib/supabase-server')
+        const supabase = createClient()
+        
+        const fileName = `${fileId}.${type}`;
+        const { data, error } = await supabase.storage
+          .from('documents')
+          .download(fileName)
+        
+        if (error || !data) {
+          return NextResponse.json({ error: 'File not found' }, { status: 404 })
+        }
+        
+        fileBuffer = Buffer.from(await data.arrayBuffer())
+      } catch (error) {
+        console.error('Error accessing Supabase Storage:', error);
+        fileBuffer = await getFile(fileId, type)
+      }
+    } else {
+      fileBuffer = await getFile(fileId, type)
+    }
+    
     if (!fileBuffer) {
-      return NextResponse.json(
-        { error: 'File not found or expired' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'File not found' }, { status: 404 })
     }
 
     const mimeType = type === 'docx' 
@@ -29,6 +50,7 @@ export async function GET(
       headers: {
         'Content-Type': mimeType,
         'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': fileBuffer.length.toString(),
         'Cache-Control': 'private, no-cache, no-store, must-revalidate',
         'Expires': '0',
         'Pragma': 'no-cache'
