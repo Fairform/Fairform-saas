@@ -250,8 +250,8 @@ export function formatPrice(product: StripeProduct): string {
 }
 
 export function formatPriceForPricing(product: StripeProduct): string {
-  if (product.price === 0) return 'Free'
-  return `$${product.price}/month`
+  if (product.price === 0) return 'Custom Pricing'
+  return `$${(product.price / 100).toFixed(0)}/month`
 }
 
 // Validate if a price ID exists in our products
@@ -407,6 +407,11 @@ export async function createCheckoutSession({
 // Log Stripe session to database
 export async function logStripeSession(sessionData: StripeSessionData) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping session logging');
+      return;
+    }
+    
     const { error } = await supabase
       .from('stripe_sessions')
       .insert({
@@ -430,6 +435,11 @@ export async function logStripeSession(sessionData: StripeSessionData) {
 // Update session status
 export async function updateSessionStatus(sessionId: string, status: string) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping session status update');
+      return;
+    }
+    
     const { error } = await supabase
       .from('stripe_sessions')
       .update({
@@ -461,6 +471,11 @@ export async function grantProductAccess({
   expiresAt?: string | null;
 }) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping product access grant');
+      return;
+    }
+    
     const { error } = await supabase
       .from('user_access')
       .upsert({
@@ -491,6 +506,11 @@ export async function revokeProductAccess(
   accessType: 'one_time' | 'subscription' | 'all' = 'all'
 ) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping product access revocation');
+      return;
+    }
+    
     let query = supabase
       .from('user_access')
       .update({ 
@@ -541,6 +561,11 @@ export async function createSubscriptionRecord({
   metadata?: Record<string, any>;
 }) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping subscription record creation');
+      return;
+    }
+    
     const { error } = await supabase
       .from('user_subscriptions')
       .upsert({
@@ -588,6 +613,11 @@ export async function updateSubscriptionRecord(
     
     updateData.updated_at = new Date().toISOString();
 
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping subscription record update');
+      return;
+    }
+
     const { error } = await supabase
       .from('user_subscriptions')
       .update(updateData)
@@ -604,6 +634,11 @@ export async function updateSubscriptionRecord(
 // Check if user has access to a product
 export async function checkUserAccess(userId: string, productName?: string): Promise<boolean> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, returning false for user access check');
+      return false;
+    }
+    
     let query = supabase
       .from('user_access')
       .select('*')
@@ -631,6 +666,11 @@ export async function checkUserAccess(userId: string, productName?: string): Pro
 // Get user's active subscriptions
 export async function getUserSubscriptions(userId: string) {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, returning empty subscriptions');
+      return [];
+    }
+    
     const { data, error } = await supabase
       .from('user_subscriptions')
       .select('*')

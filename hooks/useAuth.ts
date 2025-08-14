@@ -27,6 +27,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('your-project') || supabaseKey.includes('your-anon-key')) {
+      console.warn('Supabase not configured, running in offline mode')
+      setLoading(false)
+      return
+    }
+
     // Get initial session
     const getInitialSession = async () => {
       try {
@@ -61,6 +70,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signOut = async () => {
     try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+        console.warn('Supabase not configured')
+        return
+      }
+      
       const { error } = await supabase.auth.signOut()
       if (error) {
         console.error('Error signing out:', error)
@@ -74,6 +89,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signIn = async (email: string, password: string) => {
     try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+        throw new Error('Authentication not available - Supabase not configured')
+      }
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -89,6 +109,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signUp = async (email: string, password: string, metadata?: any) => {
     try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+        throw new Error('Authentication not available - Supabase not configured')
+      }
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -108,6 +133,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const resetPassword = async (email: string) => {
     try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      if (!supabaseUrl || supabaseUrl.includes('your-project')) {
+        throw new Error('Authentication not available - Supabase not configured')
+      }
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
       })

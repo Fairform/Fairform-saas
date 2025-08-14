@@ -182,6 +182,11 @@ export async function checkDocumentGenerationLimit(userId: string): Promise<{
 // Track document generation
 export async function trackDocumentGeneration(userId: string, documentId: string): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping document tracking')
+      return
+    }
+    
     const { error } = await supabase.rpc('track_document_usage', {
       p_user_id: userId,
       p_document_id: documentId
@@ -204,6 +209,11 @@ export async function trackDocumentDownload(
   userAgent?: string
 ): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, skipping download tracking')
+      return
+    }
+    
     const { error } = await supabase
       .from('user_downloads')
       .insert({
