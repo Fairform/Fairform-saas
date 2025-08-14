@@ -18,7 +18,6 @@ import {
   FileText,
   Zap
 } from 'lucide-react'
-import Logo from '../../components/Logo'
 
 // Navigation helper component - prevents 404 errors
 const NavigationLink = ({ href, children, className, onClick }: { 

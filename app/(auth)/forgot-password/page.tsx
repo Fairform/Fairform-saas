@@ -45,25 +45,6 @@ function ForgotPasswordPageContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <div className="flex flex-col min-h-screen">
-        <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-6xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <NavigationLink href="/" className="text-xl font-bold text-gray-900">
-                Formative
-              </NavigationLink>
-
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleBackToLogin}
-                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  Back to Login
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
         <main className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">

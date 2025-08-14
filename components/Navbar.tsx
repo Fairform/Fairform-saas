@@ -53,7 +53,6 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link href="/" className="text-lg font-medium text-gray-900">
-            <span className="sr-only">Formative</span>
             Formative
           </Link>
           
