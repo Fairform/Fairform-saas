@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { checkDocumentGenerationLimit } from '@/lib/access-control'
+import { checkDocumentGenerationLimit, getUserAccess, getUserSubscriptions } from '@/lib/access-control'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,13 +15,31 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const limitCheck = await checkDocumentGenerationLimit(userId)
+    const [limitCheck, userAccess, subscriptions] = await Promise.all([
+      checkDocumentGenerationLimit(userId),
+      getUserAccess(userId),
+      getUserSubscriptions(userId)
+    ])
+
+    const purchasedPacks = userAccess.map(access => {
+      const [industryId, packId] = access.product_name.split('-')
+      return { industryId, packId }
+    })
 
     return NextResponse.json({
       canGenerate: limitCheck.canGenerate,
       limit: limitCheck.limit,
       used: limitCheck.used,
-      remaining: limitCheck.remaining
+      remaining: limitCheck.remaining,
+      purchasedPacks,
+      activeSubscriptions: subscriptions.map(sub => ({
+        productName: sub.product_name,
+        status: sub.status
+      }))
+    }, {
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate'
+      }
     })
   } catch (error) {
     console.error('Subscription status error:', error)
