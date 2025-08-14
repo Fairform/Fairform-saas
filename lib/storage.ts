@@ -55,11 +55,7 @@ export async function storeFile(
     }
   }
   
-  return {
-    id,
-    url: `data:${mimeType};base64,${buffer.toString('base64')}`,
-    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-  };
+  throw new Error('Storage service unavailable. Please configure Supabase Storage or Vercel Blob.');
 }
 
 export async function getFile(id: string, extension?: string): Promise<Buffer | null> {

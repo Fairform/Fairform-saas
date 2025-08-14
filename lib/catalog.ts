@@ -34,6 +34,13 @@ export const INDUSTRY_PACKS: Record<string, IndustryPack> = {
       { id: "ndis-full", label: "NDIS Compliance Pack", formats: ["pdf", "docx"], includes: "all-plus-extras" }
     ]
   },
+  "generic-small-business": {
+    label: "Small Business Essentials",
+    packs: [
+      { id: "lite", label: "Lite Pack", formats: ["pdf"], includes: "subset" },
+      { id: "pro", label: "Pro Pack", formats: ["pdf", "docx"], includes: "all" }
+    ]
+  },
   "childcare": {
     label: "Childcare & Education",
     packs: [
