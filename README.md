@@ -2,6 +2,20 @@
 
 Formative is a comprehensive SaaS platform that generates audit-ready compliance policy documents in 60 seconds using AI. Built for small and medium businesses in regulated industries like NDIS, construction, childcare, and more.
 
+## Dual Pricing Model
+
+### Subscription Plans
+- **Starter**: $129/month - Generate up to 3 documents/month
+- **Pro**: $179/month - Unlimited document generation
+- **Agency**: $499/month - Enterprise solution for agencies
+- **Enterprise**: Custom pricing - Dedicated support and features
+
+### One-Time Industry Packs
+- **Lite Pack**: $79 - Essential documents (PDF only)
+- **Pro Pack**: $189 - Comprehensive documents (PDF & DOCX)
+- **NDIS Full Pack**: $499 - Complete NDIS compliance suite (PDF & DOCX)
+- **Construction Compliance Pack**: $349 - Full construction industry suite (PDF & DOCX)
+
 ## 🚀 Features
 
 - **Unified Navigation** - Consistent navbar across all pages with "Formative" branding (no logo display)
@@ -225,14 +239,17 @@ export const openai = new OpenAI({
 ## 🧪 Testing
 
 ```bash
-# Run tests
-npm run test
+# Run unit tests
+npm test
+
+# Watch mode for development
+npm run test:watch
+
+# End-to-end test scenarios
+npm run test:e2e
 
 # Test Stripe payments (requires Stripe CLI)
 stripe listen --forward-to localhost:3000/api/webhooks/stripe
-
-# Test document generation
-npm run test:generate
 ```
 
 ## 📚 API Endpoints
